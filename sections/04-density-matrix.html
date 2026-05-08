@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3. The density matrix as a feature – The Density Matrix in Your Brainwaves</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c574d9342b3cd09e7e65e225d406e374.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-56b0f8a1bdfa2096ae6fa7236852047b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c574d9342b3cd09e7e65e225d406e374.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="3. The density matrix as a feature – The Density Matrix in Your Brainwaves">
+<meta property="og:description" content="What a borrowed mathematical formalism reveals about inference under bounded computational precision">
+<meta property="og:image" content="https://yazidryuichi.github.io/density-matrix-brainwaves/assets/density_matrix_panel.png">
+<meta property="og:site_name" content="The Density Matrix in Your Brainwaves">
+<meta property="og:image:alt" content="Static 2-by-2 panel of the cohort-mean density-matrix magnitude across delta, theta, alpha, and beta bands. The interactive version requires JavaScript.">
+<meta property="og:image:height" content="1408">
+<meta property="og:image:width" content="1388">
+<meta name="twitter:title" content="3. The density matrix as a feature – The Density Matrix in Your Brainwaves">
+<meta name="twitter:description" content="What a borrowed mathematical formalism reveals about inference under bounded computational precision">
+<meta name="twitter:image" content="https://yazidryuichi.github.io/density-matrix-brainwaves/assets/density_matrix_panel.png">
+<meta name="twitter:creator" content="@yazidh">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image:alt" content="Static 2-by-2 panel of the cohort-mean density-matrix magnitude across delta, theta, alpha, and beta bands. The interactive version requires JavaScript.">
+<meta name="twitter:image-height" content="1408">
+<meta name="twitter:image-width" content="1388">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">The Density Matrix in Your Brainwaves</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Hook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../sections/02-classical.html"> 
+<span class="menu-text">1. The classical view</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../sections/03-pivot.html"> 
+<span class="menu-text">2. The pivot</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../sections/04-density-matrix.html" aria-current="page"> 
+<span class="menu-text">3. The density matrix</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../sections/05-closing.html"> 
+<span class="menu-text">4. What this opens up</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Yazidryuichi/biomarker-iium-pipeline"> <i class="bi bi-github" role="img" aria-label="GitHub repo">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">3. The density matrix as a feature</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="section-badges">
+<p><span class="badge-pill">Stage 6</span> <span class="badge-pill">Hilbert → ρ → linear SVM</span> <span class="badge-pill">10-fold × 10 CV</span> <span class="badge-pill">N = 28</span></p>
+</div>
+<p>The pivot in Section 2 ended on a question. What does a feature space of the right shape look like for this signal? Theta/beta ratio is one specific reduction of a much richer object. The classifier that survived cross-validation was reading off relative beta power across the back of the head, but the deeper observation is that the cleaned EEG carries cross-channel and cross-frequency structure the textbook power-and-coherence menu collapses into pairwise scalars. The density matrix is the smallest object I know that keeps that structure intact.</p>
+<p>The construction is short. For each band <span class="math inline">\(b\)</span> in <span class="math inline">\(\{\delta, \theta, \alpha, \beta\}\)</span>, zero-phase Butterworth bandpass each of the fifteen channels, take the Hilbert transform of each, and stack them at every time point into a complex column vector <span class="math inline">\(\psi(t) \in \mathbb{C}^{15}\)</span>. Normalize <span class="math inline">\(\psi(t)\)</span> to unit length, take the outer product against itself, and average over all kept time samples across all epochs:</p>
+<p><span class="math display">\[ \rho_b \;=\; \frac{1}{T} \sum_t \frac{\psi(t)\,\psi(t)^{\dagger}}{\|\psi(t)\|^2} \]</span></p>
+<p>The result is a Hermitian, positive semi-definite, trace-one <span class="math inline">\(15 \times 15\)</span> complex matrix. It is a density matrix in the formal quantum-mechanical sense, even though every step of the construction is classical signal processing. Across twenty-eight children and four bands, max trace error is <span class="math inline">\(4 \times 10^{-16}\)</span> and min eigenvalue stays above <span class="math inline">\(-7 \times 10^{-17}\)</span>, both within float64 round-off. Cauchy-Schwarz holds throughout.</p>
+<figure class="rho-explorer figure" aria-labelledby="rho-explorer-title">
+  <figcaption id="rho-explorer-title" class="rho-explorer-toolbar">
+    <label class="rho-band-label">Frequency band
+      <select id="rho-band-select" aria-label="Select frequency band">
+        <option value="delta">δ · 1–4 Hz</option>
+        <option value="theta">θ · 4–8 Hz</option>
+        <option value="alpha" selected="">α · 8–13 Hz</option>
+        <option value="beta">β · 13–30 Hz</option>
+      </select>
+    </label>
+    <span id="rho-explorer-readout" class="rho-readout" aria-live="polite">Hover any cell to inspect the entry.</span>
+  </figcaption>
+  <div id="rho-heatmap" role="img" aria-label="Interactive heatmap of the cohort-mean density matrix. Use the dropdown to switch between delta, theta, alpha, and beta bands. Hover any cell to read the channel pair, magnitude, and phase."></div>
+  <noscript>
+    <img class="density-matrix-panel figure-img" src="../assets/density_matrix_panel.png" alt="Static 2-by-2 panel of the cohort-mean density-matrix magnitude across delta, theta, alpha, and beta bands. The interactive version requires JavaScript.">
+  </noscript>
+</figure>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(function () {
+  var DATA_URL = "../assets/density_matrix_data.json";
+  d3.json(DATA_URL).then(function (data) {
+    var channels = data.channels;
+    var n = channels.length;
+    var vmax = data.vmax_magnitude;
+
+    var margin = { top: 32, right: 70, bottom: 56, left: 56 };
+    var cell = 24;
+    var heatW = n * cell;
+    var heatH = n * cell;
+    var width = heatW + margin.left + margin.right;
+    var height = heatH + margin.top + margin.bottom;
+
+    var svg = d3.select("#rho-heatmap")
+      .append("svg")
+      .attr("viewBox", "0 0 " + width + " " + height)
+      .attr("width", "100%")
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    var g = svg.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var color = function (v) { return d3.interpolateMagma(v / vmax); };
+
+    // Cell rects, one per (i, j).
+    var cells = [];
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        cells.push({ i: i, j: j });
+      }
+    }
+
+    var rect = g.selectAll("rect.cell")
+      .data(cells)
+      .enter()
+      .append("rect")
+      .attr("class", "cell")
+      .attr("x", function (d) { return d.j * cell; })
+      .attr("y", function (d) { return d.i * cell; })
+      .attr("width", cell)
+      .attr("height", cell)
+      .attr("stroke", "#fbf9f4")
+      .attr("stroke-width", 0.5)
+      .attr("fill", "#000")
+      .style("cursor", "crosshair");
+
+    // Channel tick labels.
+    g.selectAll(".col-label")
+      .data(channels)
+      .enter()
+      .append("text")
+      .attr("class", "col-label")
+      .attr("x", function (_, j) { return j * cell + cell / 2; })
+      .attr("y", heatH + 14)
+      .attr("text-anchor", "end")
+      .attr("transform", function (_, j) {
+        var x = j * cell + cell / 2; var y = heatH + 14;
+        return "rotate(-55 " + x + " " + y + ")";
+      })
+      .style("font-family", "IBM Plex Sans, sans-serif")
+      .style("font-size", "10px")
+      .style("fill", "#3a4055")
+      .text(function (d) { return d; });
+
+    g.selectAll(".row-label")
+      .data(channels)
+      .enter()
+      .append("text")
+      .attr("class", "row-label")
+      .attr("x", -6)
+      .attr("y", function (_, i) { return i * cell + cell / 2 + 3; })
+      .attr("text-anchor", "end")
+      .style("font-family", "IBM Plex Sans, sans-serif")
+      .style("font-size", "10px")
+      .style("fill", "#3a4055")
+      .text(function (d) { return d; });
+
+    // Colorbar.
+    var cbW = 14;
+    var cbX = heatW + 22;
+    var cbDef = svg.append("defs").append("linearGradient")
+      .attr("id", "rho-cb-grad")
+      .attr("x1", "0%").attr("x2", "0%")
+      .attr("y1", "100%").attr("y2", "0%");
+    var stops = 16;
+    for (var s = 0; s <= stops; s++) {
+      cbDef.append("stop")
+        .attr("offset", (s / stops * 100) + "%")
+        .attr("stop-color", d3.interpolateMagma(s / stops));
+    }
+    g.append("rect")
+      .attr("x", cbX).attr("y", 0)
+      .attr("width", cbW).attr("height", heatH)
+      .attr("fill", "url(#rho-cb-grad)")
+      .attr("stroke", "rgba(110, 127, 153, 0.25)");
+
+    var cbScale = d3.scaleLinear().domain([0, vmax]).range([heatH, 0]);
+    var cbAxis = d3.axisRight(cbScale).ticks(4).tickFormat(d3.format(".2f"));
+    g.append("g")
+      .attr("transform", "translate(" + (cbX + cbW) + ",0)")
+      .call(cbAxis)
+      .call(function (sel) {
+        sel.selectAll("text")
+          .style("font-family", "IBM Plex Sans, sans-serif")
+          .style("font-size", "10px")
+          .style("fill", "#3a4055");
+        sel.selectAll(".domain, line").attr("stroke", "rgba(110, 127, 153, 0.4)");
+      });
+    g.append("text")
+      .attr("x", cbX + cbW + 14).attr("y", heatH / 2)
+      .attr("transform", "rotate(90 " + (cbX + cbW + 14) + " " + (heatH / 2) + ")")
+      .attr("text-anchor", "middle")
+      .style("font-family", "Fraunces, Crimson Pro, serif")
+      .style("font-size", "11px")
+      .style("font-style", "italic")
+      .style("fill", "#3a4055")
+      .text("|ρ_b|");
+
+    // Title.
+    var titleSel = g.append("text")
+      .attr("class", "rho-title")
+      .attr("x", 0).attr("y", -12)
+      .style("font-family", "Fraunces, Crimson Pro, serif")
+      .style("font-size", "12px")
+      .style("fill", "#0f1a2e");
+
+    var readout = d3.select("#rho-explorer-readout");
+    var fmt2 = d3.format(".3f");
+    var fmtPhase = d3.format(".2f");
+
+    function render(band) {
+      var b = data.bands[band];
+      var mag = b.magnitude;
+      var ph = b.phase;
+      titleSel.text("Cohort-mean |ρ| at " + b.label + " (N = " + data.n_subjects + ")");
+      rect.transition()
+        .duration(280)
+        .attr("fill", function (d) { return color(mag[d.i][d.j]); });
+      rect.on("mouseenter", function (event, d) {
+        var m = mag[d.i][d.j];
+        var p = ph[d.i][d.j];
+        var phaseStr = (d.i === d.j) ? "n/a (diagonal)" : fmtPhase(p) + " rad";
+        readout.html(
+          "<strong>" + channels[d.i] + " × " + channels[d.j] + "</strong> · " +
+          "|ρ| = <code>" + fmt2(m) + "</code> · " +
+          "arg(ρ) = <code>" + phaseStr + "</code>"
+        );
+      });
+      rect.on("mouseleave", function () {
+        readout.text("Hover any cell to inspect the entry.");
+      });
+    }
+
+    render("alpha");
+    document.getElementById("rho-band-select").addEventListener("change", function (e) {
+      render(e.target.value);
+    });
+  }).catch(function (err) {
+    var n = document.getElementById("rho-heatmap");
+    if (n) n.innerHTML =
+      '<p style="color:#b73e3e;font-family:IBM Plex Sans,sans-serif;font-size:0.9em">' +
+      'Failed to load density-matrix data: ' + err.message +
+      '. The 2x2 static panel is the fallback.</p>' +
+      '<img class="density-matrix-panel" src="../assets/density_matrix_panel.png" alt="Static heatmap panel">';
+  });
+})();
+</script>
+<div class="figure-caption">
+<p><strong>Figure 3 (interactive).</strong> Cohort-mean magnitude of <span class="math inline">\(\rho_b\)</span> across the four bands (<span class="math inline">\(N = 28\)</span>). Switch the band with the dropdown. Hover any cell to read the channel pair, <span class="math inline">\(|\rho_{ij}|\)</span>, and the off-diagonal phase <span class="math inline">\(\arg(\rho_{ij})\)</span> in radians. Diagonal entries are channel occupation probabilities; off-diagonal entries carry cross-channel covariance and phase relationships that pairwise coherence and band power summaries throw away. The alpha band’s central-parietal block is consistent with the SHAP top-three from Section 2 (Pz, P3, O1).</p>
+</div>
+<div class="figure-caption">
+<p><strong>Figure 4.</strong> Animated construction of <span class="math inline">\(\rho_b\)</span> from the time-averaged outer product of the band-limited analytic signal across channels for a single subject.</p>
+</div>
+<video class="manim-embed" controls="" loop="" muted="" playsinline="" preload="metadata">
+  <source src="../assets/04_density_matrix_construction.mp4" type="video/mp4">
+  <p>The render exists at <code>assets/04_density_matrix_construction.mp4</code>.</p>
+</video>
+<p>For each subject and band, I flatten the matrix into a real feature vector. Fifteen real diagonals plus the real and imaginary parts of the 105 strict upper-triangle entries gives 225 reals per band, 900 features in total at <span class="math inline">\(N = 15\)</span>. The <span class="math inline">\((\mathrm{Re}, \mathrm{Im})\)</span> decomposition is mathematically equivalent to magnitude and phase but avoids the cyclic-angle pathology that breaks linear classifiers on phase. A linear SVM with top-ten ANOVA feature selection inside each fold runs under repeated stratified 10-fold cross-validation, ten repeats, fixed seed, the same fold indices reused for every model on every feature set. On the same twenty-eight children, that classifier reaches a mean balanced accuracy of <span class="num-chip">0.657</span> and a mean ROC AUC of <span class="num-chip">0.780</span>.</p>
+<p>The classical baseline. Same children, same cross-validation, the standard QEEG menu of absolute and relative band power, frontal alpha asymmetry, theta/beta ratio, fronto-parietal coherence, alpha reactivity, and band-limited covariance, 622 features in total. The best classifier on that feature set is a Random Forest at <span class="num-chip">0.618</span> mean balanced accuracy, <span class="num-chip">0.615</span> ROC AUC. The density-matrix features pull the AUC from <span class="num-chip">0.615</span> to <span class="num-chip">0.780</span> on the same data. That is the empirical claim the rest of this section needs to qualify.</p>
+<p>The kernel question. The density matrix appears in supervised quantum machine learning as a fidelity kernel rather than a feature. By Schuld’s 2021 result on the kernel-equivalence of supervised quantum models <span class="citation" data-cites="schuld2021">(<a href="#ref-schuld2021" role="doc-biblioref">Schuld, 2021</a>)</span>, a quantum-kernel SVM with feature map <span class="math inline">\(|\psi(x)\rangle\)</span> computes pairwise similarities as squared overlaps:</p>
+<p><span class="math display">\[ K_Q(x, y) \;=\; |\langle\psi(x)|\psi(y)\rangle|^2 \;=\; \mathrm{Tr}(\rho_x \rho_y) \]</span></p>
+<details class="equation-explain">
+  <summary>Read this equation, term by term</summary>
+  <dl>
+    <dt>K<sub>Q</sub>(x, y)</dt>
+    <dd>The quantum-fidelity kernel: a single non-negative number measuring how similar inputs <em>x</em> and <em>y</em> are after the encoding circuit lifts them into Hilbert space.</dd>
+    <dt>|ψ(x)⟩, |ψ(y)⟩</dt>
+    <dd>The two inputs encoded as quantum state vectors. The bra-ket symbols are physics shorthand for column vectors and their conjugate transposes.</dd>
+    <dt>⟨ψ(x) | ψ(y)⟩</dt>
+    <dd>The complex inner product. Close to one when the two encoded states overlap; close to zero when they are orthogonal.</dd>
+    <dt>| · |<sup>2</sup></dt>
+    <dd>Squared magnitude. Maps the complex inner product back to a real, non-negative similarity.</dd>
+    <dt>Tr(ρ<sub>x</sub> ρ<sub>y</sub>)</dt>
+    <dd>The Hilbert-Schmidt inner product on density matrices. Schuld (2021) showed this equals the squared overlap above, so the kernel can be computed from the density matrices alone, without ever evaluating the encoding circuit.</dd>
+  </dl>
+</details>
+<p>If the quantum kernel and the explicit density-matrix features were equivalent on this data, an SVM with a precomputed Hilbert-Schmidt kernel <span class="math inline">\(K(s, t) = \frac{1}{B}\sum_b \mathrm{Tr}(\rho_b^s \rho_b^t)\)</span> should land in the same neighbourhood as a parameterised quantum-circuit kernel on quantum-inspired summary features (QEPP, von Neumann entropy, and related terms from the pipeline’s Stage 5). On this cohort, under matched cross-validation, the two kernels do not converge. The Hilbert-Schmidt SVM reaches mean balanced accuracy 0.540, AUC 0.395. The parameterised quantum kernel on the Stage 5 features reaches 0.495 and 0.525. The paired Wilcoxon difference between the two kernels is +0.045 with <span class="math inline">\(p = 0.44\)</span>, not distinguishable from zero.</p>
+<div id="auc-comparison-chart" class="auc-chart" role="img" aria-label="Bar chart comparing mean ROC AUC across five classifiers on N=28: density-matrix linear SVM at 0.780, density-matrix Random Forest at 0.755, classical Random Forest at 0.615, parameterised quantum-circuit SVM at 0.525, Hilbert-Schmidt kernel SVM at 0.395."></div>
+<script src="https://cdn.jsdelivr.net/npm/vega@5.27.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.18.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.24.0"></script>
+<script>
+(function () {
+  var spec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#fbf9f4",
+    "title": {
+      "text": "Mean ROC AUC across five classifiers (matched 10-fold × 10 CV, N = 28)",
+      "fontSize": 12, "font": "Fraunces, Crimson Pro, Charter, serif",
+      "color": "#0f1a2e", "anchor": "start", "frame": "group", "offset": 6
+    },
+    "data": { "values": [
+      { "model": "SVM linear · density-matrix",           "auc": 0.780, "set": "Density matrix as feature" },
+      { "model": "RandomForest · density-matrix",         "auc": 0.755, "set": "Density matrix as feature" },
+      { "model": "RandomForest · classical QEEG menu",    "auc": 0.615, "set": "Classical baseline" },
+      { "model": "QSVM-6q-ZZ · quantum features (Stage 5)", "auc": 0.525, "set": "Kernel proxy" },
+      { "model": "Hilbert-Schmidt SVM · density-matrix",  "auc": 0.395, "set": "Kernel proxy" }
+    ] },
+    "layer": [
+      { "mark": { "type": "rule", "stroke": "#9aa3b3", "strokeDash": [3, 3] },
+        "encoding": { "x": { "datum": 0.5 } } },
+      { "mark": { "type": "bar", "tooltip": true, "cornerRadiusEnd": 2, "height": 22 },
+        "encoding": {
+          "y": { "field": "model", "type": "nominal", "sort": "-x",
+                  "axis": { "title": null, "labelFontSize": 11,
+                            "labelFont": "IBM Plex Sans, sans-serif",
+                            "labelLimit": 320, "labelPadding": 6,
+                            "domain": false, "ticks": false,
+                            "labelColor": "#1f1f1f" } },
+          "x": { "field": "auc", "type": "quantitative",
+                  "scale": { "domain": [0.35, 0.82] },
+                  "axis": { "title": "Mean ROC AUC", "titleFont": "IBM Plex Sans, sans-serif",
+                            "titleColor": "#3a4055", "titleFontSize": 11,
+                            "labelFontSize": 10, "labelColor": "#3a4055",
+                            "format": ".2f", "tickCount": 5,
+                            "gridColor": "rgba(110, 127, 153, 0.18)",
+                            "domainColor": "#9aa3b3" } },
+          "color": { "field": "set", "type": "nominal",
+                      "scale": { "domain": ["Density matrix as feature", "Classical baseline", "Kernel proxy"],
+                                  "range":  ["#6b4f8e", "#2c5f4f", "#b73e3e"] },
+                      "legend": { "orient": "bottom", "title": null,
+                                  "labelFontSize": 10, "labelFont": "IBM Plex Sans, sans-serif",
+                                  "labelColor": "#3a4055", "symbolSize": 80,
+                                  "rowPadding": 4, "padding": 6 } }
+        } },
+      { "mark": { "type": "text", "align": "left", "baseline": "middle", "dx": 5,
+                   "fontSize": 11, "font": "Fraunces, Crimson Pro, Charter, serif",
+                   "fontWeight": 500, "color": "#1f1f1f" },
+        "encoding": {
+          "y": { "field": "model", "type": "nominal", "sort": "-x" },
+          "x": { "field": "auc", "type": "quantitative" },
+          "text": { "field": "auc", "type": "quantitative", "format": ".3f" }
+        } }
+    ],
+    "config": {
+      "view": { "stroke": "transparent" },
+      "axis": { "labelPadding": 4 }
+    }
+  };
+  function render() {
+    if (!window.vegaEmbed) { return setTimeout(render, 80); }
+    vegaEmbed('#auc-comparison-chart', spec, {
+      actions: false,
+      renderer: 'svg'
+    });
+  }
+  render();
+})();
+</script>
+<div class="figure-caption">
+<p><strong>Figure 5.</strong> Mean ROC AUC across five classifiers under the same matched 10-fold × 10 cross-validation, N = 28. The two kernel routes to the density matrix (red) sit on either side of the random-classifier line at 0.50, while the direct-feature classifiers (purple) cluster well above the classical baseline (teal). The dashed vertical rule marks chance performance.</p>
+</div>
+<p>The right reading of this is not that the kernel-equivalence is wrong as a theorem. It is that the encoding circuit in Stage 5 is a lossy projection. It compresses 258 quantum-inspired summary features through PCA to six dimensions and rescales them to <span class="math inline">\([0, \pi]\)</span> before encoding. None of those steps preserve the off-diagonal complex structure that the explicit density matrix exposes. The explicit features beat both kernels because the kernels were never operating on the right object.</p>
+<figure class="kernel-mds figure" aria-labelledby="kernel-mds-title">
+  <figcaption id="kernel-mds-title" class="kernel-mds-toolbar">
+    <span class="kernel-mds-eyebrow">Subject geometry under each kernel</span>
+    <span class="kernel-mds-controls" role="group" aria-label="Choose kernel">
+      <button type="button" class="kernel-mds-btn is-active" data-emb="hilbert_schmidt">Hilbert-Schmidt kernel on ρ</button>
+      <button type="button" class="kernel-mds-btn" data-emb="flat_features">Linear kernel on flat features</button>
+    </span>
+  </figcaption>
+  <div id="kernel-mds-plot" role="img" aria-label="Two-dimensional metric MDS scatter of the 28 subjects under either the Hilbert-Schmidt kernel on ρ or the linear kernel on the flat density-matrix features. Subjects coloured by the median split on Global Executive Function score."></div>
+</figure>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>
+(function () {
+  d3.json("../assets/kernel_mds_data.json").then(function (data) {
+    var COLORS = { "0": "#b73e3e", "1": "#2c5f4f", "-1": "#9aa3b3" };
+    var LABELS = data.group_labels;
+
+    function buildTraces(embKey) {
+      var emb = data.embeddings[embKey];
+      var groups = {};
+      data.subjects.forEach(function (s, idx) {
+        var g = String(data.groups[idx]);
+        if (!groups[g]) groups[g] = { name: LABELS[g] || ("Group " + g),
+                                        color: COLORS[g] || "#9aa3b3",
+                                        x: [], y: [], text: [] };
+        groups[g].x.push(emb.x[idx]);
+        groups[g].y.push(emb.y[idx]);
+        groups[g].text.push(s);
+      });
+      return Object.keys(groups).map(function (k) {
+        var g = groups[k];
+        return {
+          type: "scatter", mode: "markers",
+          name: g.name,
+          x: g.x, y: g.y, text: g.text,
+          hovertemplate: "<b>%{text}</b><br>" + g.name + "<extra></extra>",
+          marker: {
+            size: 11, color: g.color, opacity: 0.86,
+            line: { width: 1.2, color: "#fbf9f4" }
+          }
+        };
+      });
+    }
+
+    var layout = {
+      autosize: true, height: 380,
+      margin: { l: 44, r: 24, t: 20, b: 40 },
+      paper_bgcolor: "#fbf9f4", plot_bgcolor: "#fbf9f4",
+      font: { family: "IBM Plex Sans, sans-serif", size: 11, color: "#3a4055" },
+      xaxis: { title: { text: "MDS dimension 1", standoff: 10 },
+                zeroline: true, zerolinecolor: "rgba(110,127,153,0.35)",
+                gridcolor: "rgba(110,127,153,0.18)" },
+      yaxis: { title: { text: "MDS dimension 2", standoff: 10 },
+                zeroline: true, zerolinecolor: "rgba(110,127,153,0.35)",
+                gridcolor: "rgba(110,127,153,0.18)",
+                scaleanchor: "x", scaleratio: 1 },
+      legend: { orientation: "h", x: 0, y: 1.12, xanchor: "left",
+                 bgcolor: "rgba(0,0,0,0)" },
+      hoverlabel: { bgcolor: "#fbf9f4",
+                     font: { family: "IBM Plex Sans, sans-serif", size: 11,
+                              color: "#1f1f1f" },
+                     bordercolor: "rgba(107, 79, 142, 0.4)" }
+    };
+    var config = { displayModeBar: false, responsive: true };
+
+    Plotly.newPlot("kernel-mds-plot", buildTraces("hilbert_schmidt"),
+                    layout, config);
+
+    var btns = document.querySelectorAll(".kernel-mds-btn");
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        btns.forEach(function (b) { b.classList.remove("is-active"); });
+        btn.classList.add("is-active");
+        Plotly.react("kernel-mds-plot", buildTraces(btn.dataset.emb),
+                      layout, config);
+      });
+    });
+  }).catch(function (err) {
+    var n = document.getElementById("kernel-mds-plot");
+    if (n) n.innerHTML =
+      '<p style="color:#b73e3e;font-family:IBM Plex Sans,sans-serif;font-size:0.9em">' +
+      'Failed to load kernel-MDS data: ' + err.message + '</p>';
+  });
+})();
+</script>
+<div class="figure-caption">
+<p><strong>Figure 6.</strong> Two-dimensional metric-MDS embedding of the 28 subjects under each kernel, coloured by the median split on Global Executive Function. The Hilbert-Schmidt embedding scatters the two groups with substantial overlap; the linear-kernel embedding on the flat density-matrix features (after standardisation) shows a more separable layout. The geometry is the visualisation of the AUC contrast in Figure 5.</p>
+</div>
+<iframe class="d3-interactive cv-slider-frame" src="../interactive/cv_slider_shap.html" title="Per-fold balanced accuracy and top-feature contributions for classical versus density-matrix features under matched 10-fold cross-validation" loading="lazy" height="640">
+</iframe>
+<div class="figure-caption">
+<p><strong>Figure 7 (interactive).</strong> Per-fold balanced accuracy under the same matched 10-fold × 10-repeats split used for Figure 5, with each fold’s score averaged across the ten repeats. Drag the slider or hover any bar to see the top features the classifier relied on at that fold. Classical features are top-three relative beta power at posterior channels (Pz, P3, O1) every fold; the structured-feature panel surfaces a mixture of <span class="math inline">\(\rho_{ii}\)</span> diagonals and off-diagonal real / imaginary parts that varies across folds, which is the small-sample noise that underwrites the per-fold variance you can see in the bar heights.</p>
+</div>
+<p>The honest comparison, then, is not the original 0.585 versus 0.657 framing. It is this. A linear classifier on the 900 entries of <span class="math inline">\(\rho\)</span> outperforms the best classical QEEG classifier on this cohort by a substantial AUC gap (<span class="num-chip">0.780</span> versus <span class="num-chip">0.615</span>). Two parallel kernel routes to the same density matrix, one through the Hilbert-Schmidt inner product and one through a parameterised circuit, both underperform the direct features. The signal lives in the entries of <span class="math inline">\(\rho\)</span>. The kernels are one specific way of accessing it that, at this scale and on these features, throws information away.</p>
+<div class="notation-glossary">
+<p>Notation</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\rho_b\)</span></td>
+<td>density matrix at frequency band <span class="math inline">\(b \in \{\delta, \theta, \alpha, \beta\}\)</span>, Hermitian positive semi-definite, trace one</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\psi(t)\)</span></td>
+<td>complex multichannel analytic signal at time <span class="math inline">\(t\)</span>, vector in <span class="math inline">\(\mathbb{C}^{15}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\psi(t)^{\dagger}\)</span></td>
+<td>conjugate transpose of <span class="math inline">\(\psi(t)\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(K_Q(x, y)\)</span></td>
+<td>quantum-fidelity kernel: squared overlap of embedded states</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathrm{Tr}(\rho_x \rho_y)\)</span></td>
+<td>Hilbert-Schmidt inner product of two density matrices</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p\)</span></td>
+<td>paired Wilcoxon two-sided p-value comparing matched per-fold accuracies</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><a href="../sections/05-closing.html"><strong>→ Continue to Section 4: What this opens up</strong></a></p>
+
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-schuld2021" class="csl-entry" role="listitem">
+Schuld, M. (2021). Supervised quantum machine learning models are kernel methods. <em>arXiv Preprint</em>. <a href="https://arxiv.org/abs/2101.11020">https://arxiv.org/abs/2101.11020</a>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/yazidryuichi\.github\.io\/density-matrix-brainwaves");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Yazid Habiburahman · 2026</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+<script>
+(function () {
+  // A1: reading-progress bar
+  var bar = document.createElement('div');
+  bar.id = 'reading-progress';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.prepend(bar);
+  function update() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    bar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+
+  // A6: respect prefers-reduced-motion for Manim videos
+  try {
+    if (window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('video.manim-embed, video.hero-illustration').forEach(function (v) {
+        v.removeAttribute('loop');
+        v.removeAttribute('autoplay');
+        try { v.pause(); } catch (e) { /* no-op */ }
+      });
+    }
+  } catch (e) { /* no-op */ }
+
+  // B4: floating next-section CTA card
+  var path = (window.location.pathname || '').replace(/\/$/, '');
+  var key = path.split('/').pop() || 'index.html';
+  var routes = {
+    'index.html': {
+      href: 'sections/02-classical.html',
+      eyebrow: 'Section 1 of 4 · Up next',
+      title: 'The classical view',
+      teaser: 'Theta/beta ratio is the textbook biomarker. The published evidence is more complicated than the clinical protocols let on.'
+    },
+    '02-classical.html': {
+      href: '03-pivot.html',
+      eyebrow: 'Section 2 of 4 · Up next',
+      title: 'The pivot',
+      teaser: 'None of the eight pre-specified correlations survived FDR correction. The textbook biomarker, on this cohort, did not generalise.'
+    },
+    '03-pivot.html': {
+      href: '04-density-matrix.html',
+      eyebrow: 'Section 3 of 4 · Up next',
+      title: 'The density matrix as a feature',
+      teaser: 'A linear classifier on the entries of ρ beats the classical QEEG menu by an AUC gap of 0.165 on the same data.'
+    },
+    '04-density-matrix.html': {
+      href: '05-closing.html',
+      eyebrow: 'Section 4 of 4 · Up next',
+      title: 'What this opens up',
+      teaser: 'Three candidate explanations for the density-matrix gap, and one now looks more likely than the others.'
+    },
+    '05-closing.html': {
+      href: 'https://github.com/Yazidryuichi/biomarker-iium-pipeline',
+      eyebrow: 'Code & data',
+      title: 'biomarker-iium-pipeline',
+      teaser: 'Full pipeline including Stage 6 density-matrix module, pre-registration, and the canonical progress report.'
+    }
+  };
+  var route = routes[key];
+  if (!route) return;
+  try {
+    if (sessionStorage.getItem('next-cta-dismissed:' + key) === '1') return;
+  } catch (e) { /* sessionStorage may be blocked */ }
+
+  var card = document.createElement('aside');
+  card.className = 'next-cta-card';
+  card.setAttribute('role', 'complementary');
+  card.setAttribute('aria-label', 'Up next');
+  card.innerHTML =
+    '<button class="next-cta-close" type="button" aria-label="Dismiss">×</button>' +
+    '<div class="next-cta-eyebrow">' + route.eyebrow + '</div>' +
+    '<div class="next-cta-title"><a href="' + route.href + '">' + route.title + ' →</a></div>' +
+    '<div class="next-cta-teaser">' + route.teaser + '</div>';
+  document.body.appendChild(card);
+
+  card.querySelector('.next-cta-close').addEventListener('click', function () {
+    card.classList.remove('visible');
+    try { sessionStorage.setItem('next-cta-dismissed:' + key, '1'); }
+    catch (e) { /* no-op */ }
+  });
+
+  function maybeShow() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max <= 0) return;
+    var pct = window.scrollY / max;
+    if (pct > 0.80) {
+      card.classList.add('visible');
+    } else if (pct < 0.65) {
+      card.classList.remove('visible');
+    }
+  }
+  window.addEventListener('scroll', maybeShow, { passive: true });
+  window.addEventListener('resize', maybeShow);
+  maybeShow();
+})();
+</script>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
