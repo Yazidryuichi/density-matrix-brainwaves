@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "shap_data.json",
+  "title": "SHAP Data Schema for Density-Matrix Brainwaves CV Slider",
+  "description": "Per-fold balanced accuracy and top-feature SHAP contributions for the classical power-and-coherence baseline and the density-matrix structured features. Exported from biomarker-iium-pipeline. Saved to assets/shap_data.json (sibling of this schema file).",
+  "type": "object",
+  "required": ["classical_mean", "structured_mean", "folds"],
+  "properties": {
+    "classical_mean": {
+      "type": "number",
+      "description": "Cross-validation mean balanced accuracy under the classical 190-feature menu (power + coherence per channel × band).",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "examples": [0.585]
+    },
+    "structured_mean": {
+      "type": "number",
+      "description": "Cross-validation mean balanced accuracy under the density-matrix 1,805-feature set.",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "examples": [0.657]
+    },
+    "folds": {
+      "type": "array",
+      "description": "One entry per CV fold. Index by `fold` (1-based).",
+      "minItems": 5,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["fold", "classical", "structured"],
+        "properties": {
+          "fold": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based CV fold index"
+          },
+          "classical": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Balanced accuracy at this fold under classical features"
+          },
+          "structured": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Balanced accuracy at this fold under structured (density-matrix) features"
+          },
+          "top_features_classical": {
+            "type": "array",
+            "description": "Top-ranked classical features by |SHAP| at this fold. Order desc.",
+            "maxItems": 30,
+            "items": {
+              "$ref": "#/$defs/feature"
+            }
+          },
+          "top_features_structured": {
+            "type": "array",
+            "description": "Top-ranked structured (density-matrix) features by |SHAP| at this fold. Order desc.",
+            "maxItems": 30,
+            "items": {
+              "$ref": "#/$defs/feature"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "feature": {
+      "type": "object",
+      "required": ["name", "shap"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable feature identifier. Examples: 'rel_beta_Pz' (classical), 'rho_real_Pz_O1_beta' (structured), 'rho_imag_Cz_Fz_alpha' (structured)."
+        },
+        "shap": {
+          "type": "number",
+          "description": "Mean absolute SHAP contribution for this feature at this fold."
+        },
+        "channel": {
+          "type": "string",
+          "description": "Optional: 10-20 channel name (or pair separated by '_')",
+          "examples": ["Pz", "P3_O1"]
+        },
+        "band": {
+          "type": "string",
+          "description": "Optional: frequency band",
+          "examples": ["delta", "theta", "alpha", "beta", "gamma"]
+        },
+        "feature_type": {
+          "type": "string",
+          "enum": ["power", "coherence", "rho_diag", "rho_real_offdiag", "rho_imag_offdiag"],
+          "description": "Optional: maps to the feature category for stratified analysis"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "classical_mean": 0.585,
+      "structured_mean": 0.657,
+      "folds": [
+        {
+          "fold": 1,
+          "classical": 0.572,
+          "structured": 0.661,
+          "top_features_classical": [
+            { "name": "rel_beta_Pz", "shap": 0.150, "channel": "Pz", "band": "beta", "feature_type": "power" },
+            { "name": "rel_beta_P3", "shap": 0.131, "channel": "P3", "band": "beta", "feature_type": "power" },
+            { "name": "rel_beta_O1", "shap": 0.118, "channel": "O1", "band": "beta", "feature_type": "power" },
+            { "name": "rel_theta_Fz", "shap": 0.012, "channel": "Fz", "band": "theta", "feature_type": "power" }
+          ],
+          "top_features_structured": [
+            { "name": "rho_real_Pz_O1_beta", "shap": 0.184, "channel": "Pz_O1", "band": "beta", "feature_type": "rho_real_offdiag" },
+            { "name": "rho_imag_P3_Cz_beta", "shap": 0.162, "channel": "P3_Cz", "band": "beta", "feature_type": "rho_imag_offdiag" },
+            { "name": "rho_diag_Pz_beta", "shap": 0.157, "channel": "Pz", "band": "beta", "feature_type": "rho_diag" }
+          ]
+        }
+      ]
+    }
+  ]
+}

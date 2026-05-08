@@ -1,0 +1,37 @@
+---
+title: "4. What this opens up"
+order: 4
+---
+
+::: {.section-badges}
+[Replication queued]{.badge-pill} [ds004284]{.badge-pill} [Confidence task next]{.badge-pill} [PID estimators planned]{.badge-pill}
+:::
+
+The result is a single-cohort pilot. N = 28, one Indonesian primary school, ages six to twelve, one developmental window, one exploratory analysis after a failed confirmatory one. The next step is replication on the OpenNeuro ds004284 paediatric resting-state cohort, six of which I have already pulled to my local pipeline and the rest of which is downloading in the background as I write this. If the density-matrix gap holds on a second cohort with different recording hardware and a different developmental task, the question stops being whether the effect is real and starts being why.
+
+I have three candidate explanations and one of them now looks more likely than the others.
+
+The first is statistical. With N = 28, the AUC gap of [0.165]{.num-chip} between the density-matrix linear SVM ([0.780]{.num-chip}) and the best classical Random Forest ([0.615]{.num-chip}) is large enough that hyperparameter mismatch is a poor explanation, but it is not so large that within-cohort variance can be dismissed. Tighter matching of regularisation and feature-selection budgets across feature sets is a one-week experiment. I expect the gap to compress slightly under that matching and to remain substantial. The replication on ds004284 is the more decisive test.
+
+The second is geometric. The off-diagonal entries of $\rho_b$ encode cross-channel and cross-frequency relationships that the textbook QEEG menu of band power, coherence, and theta/beta ratio collapses into pairwise scalars. A linear classifier reading those entries directly outperforms a Random Forest reading the conventional summaries. The Hilbert-Schmidt and quantum-fidelity kernels, both of which try to access the same structure through a similarity matrix, do not match the direct-feature classifier on this data. The cleanest reading is that the entries of $\rho$ carry information that survives explicit feature extraction but is partially flattened by the kernel constructions tested here. This is the leading explanation.
+
+The third is the one that motivates the rest of my work, even though the kernel result on this pilot does not support it directly. Findling and Wyart's 2024 result [@findling2024] showed that bounded computational precision is a feature that enables generalisation rather than a constraint to work around. If the brain's representations are themselves bounded-precision encodings of underlying signals, then the right way to read them off the scalp is in a feature space that respects the same precision budget. A parameterised quantum-circuit kernel is one such feature space, and on this cohort it underperformed the direct density-matrix classifier. The interpretation I prefer is not that the precision-budget framework is wrong, but that the specific encoding I tested compresses 258 inputs through PCA to six dimensions before circuit encoding and is no longer matched to the structure of $\rho$. A circuit designed to preserve the off-diagonal complex structure of the density matrix, rather than to compress an upstream quantum-inspired summary, is the natural next experiment.
+
+Two further experiments are queued. The first is a confidence-weighted updating task with EEG, in the lineage of Bévalot and Meyniel [@bevalot2024]: do density-matrix features track trial-by-trial confidence in a way classical features cannot, and does the gap correlate with individual-difference measures of metacognitive sensitivity? The second is a partial-information-decomposition of the same decision signals using the BROJA and $I_{\min}$ estimators, pre-registered for $|\text{bias}| \leq 0.01$ bits at synergy 0.05; the synergistic component is exactly the cross-channel structure $\rho$ preserves and a univariate band-power feature loses.
+
+If you have read this far and you want more, three papers to read first. Findling and Wyart's 2024 *Science Advances* [@findling2024] for the bounded-precision result. Bévalot and Meyniel's 2024 *Communications Psychology* [@bevalot2024] for the implicit-versus-explicit-priors framework. Schuld's 2021 *arXiv* paper [@schuld2021] for the kernel-equivalence framework that connects quantum machine learning to classical statistics, and that this pilot extends in a direction the paper itself does not predict.
+
+The cohort that produced this result is twenty-eight children at Islamic Green School, Indonesia. The next cohort is whoever is willing to run the same pipeline, the same way, on a different sample. The full code, pre-registration, the canonical progress report, the Stage 6 density-matrix module added in this session, and the live results are at [github.com/Yazidryuichi/biomarker-iium-pipeline](https://github.com/Yazidryuichi/biomarker-iium-pipeline). If you replicate the result, please write to me.
+
+::: {.selected-work}
+*Selected related work.*
+
+- Dewi, Habiburahman, *et al.* (2025). Correlation between P300 latency and digit span performance in primary school children: a cross-sectional ERP study. *Proc. 13th IEEE ICOT*. [DOI: 10.1109/ICOT68409.2025.11425349](https://doi.org/10.1109/ICOT68409.2025.11425349){target="_blank"}
+- `biomarker-iium-pipeline`, including the Stage 6 density-matrix module described in Section 3. [github.com/Yazidryuichi/biomarker-iium-pipeline](https://github.com/Yazidryuichi/biomarker-iium-pipeline){target="_blank"}
+:::
+
+::: {.figure-caption}
+*Acknowledgements.* This pilot was conducted in collaboration with Dr. S.Y. Dewi (UPN Veteran Jakarta) and the Talenta Center for the Children with Special Needs. Data collection was supported by the Indonesian Embassy Cultural Section. Methodology and writing benefited from conversations with Dandy and Amora from the IIUM data team. Errors are mine.
+:::
+
+[**← Back to start**](../index.qmd)

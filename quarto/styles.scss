@@ -1,0 +1,789 @@
+/*-- scss:defaults --*/
+
+// Editorial Substack-flavored serif aesthetic, neuroscience-themed accent.
+// Benchmarks: Receptive Field (Artem Kirsanov), Distill.pub, The Atlantic long-form.
+
+$primary: #2b3a55;
+$secondary: #6e7f99;
+$accent: #6b4f8e;       // muted purple for links and emphasis
+$success: #2c5f4f;      // deep teal
+$danger: #b73e3e;       // warmer red than Bootstrap default
+$body-color: #1f1f1f;
+$body-bg: #fbf9f4;      // warm cream, not bright white
+$link-color: #6b4f8e;
+$link-hover-color: #8c6fb3;
+
+$font-family-sans-serif: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+$font-family-serif: "Crimson Pro", Charter, Georgia, serif;
+$font-family-display: "Fraunces", "Crimson Pro", Charter, serif;
+
+$headings-font-family: $font-family-display;
+$headings-font-weight: 600;
+$headings-color: #0f1a2e;
+$headings-line-height: 1.2;
+
+$h1-font-size: 2.4rem;
+$h2-font-size: 1.55rem;
+$h3-font-size: 1.22rem;
+
+/*-- scss:rules --*/
+
+// Editorial fonts
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+body {
+  font-family: $font-family-serif;
+  font-size: 1.08em;
+  line-height: 1.72;
+  color: $body-color;
+  background: $body-bg;
+  font-feature-settings: "kern", "liga", "onum";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Title block — display serif, editorial weight
+h1.title {
+  font-family: $font-family-display;
+  font-weight: 600;
+  font-size: 2.6rem;
+  letter-spacing: -0.012em;
+  line-height: 1.12;
+  color: #0f1a2e;
+  margin-top: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+p.subtitle {
+  font-family: $font-family-display;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.18rem;
+  color: #4a5a76;
+  letter-spacing: 0.001em;
+  line-height: 1.45;
+  margin-bottom: 1.4rem;
+}
+
+// Section headings — clean sans for hierarchy
+h1, h2, h3, h4 {
+  font-family: $font-family-display;
+  letter-spacing: -0.005em;
+  margin-top: 2.4em;
+  margin-bottom: 0.8em;
+}
+
+h2:first-of-type {
+  margin-top: 1.4em;
+}
+
+// Tighten line lengths for prose readability (Distill convention)
+.quarto-container,
+.page-layout-article {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+// First-letter drop cap (works on the .first-letter span wrapper around an opening paragraph)
+.first-letter > p:first-child::first-letter,
+.first-letter::first-letter {
+  font-family: $font-family-display;
+  font-size: 4.2em;
+  float: left;
+  line-height: 0.86;
+  margin-right: 0.10em;
+  margin-top: 0.04em;
+  margin-bottom: -0.10em;
+  font-weight: 600;
+  color: $accent;
+  font-feature-settings: "lnum";
+}
+
+// Pull-quote callout, Tufte-influenced sidebar style
+.pivot-callout {
+  font-family: $font-family-display;
+  font-style: italic;
+  font-size: 1.20em;
+  line-height: 1.55;
+  border-left: 3px solid $accent;
+  padding: 0.5em 0 0.5em 1.4em;
+  margin: 2.4em 0 2.4em -0.4em;
+  color: #2c2c2c;
+}
+
+// Reading meta block at top
+.reading-meta {
+  font-family: $font-family-sans-serif;
+  font-size: 0.85em;
+  color: $secondary;
+  border-bottom: 1px solid rgba(110, 127, 153, 0.25);
+  padding-bottom: 0.5em;
+  margin-bottom: 2em;
+  letter-spacing: 0.012em;
+  text-transform: none;
+}
+
+// Figure captions, italic editorial
+.figure-caption {
+  font-family: $font-family-serif;
+  font-size: 0.95em;
+  font-style: italic;
+  color: #4a5a76;
+  line-height: 1.55;
+  margin-top: 0.5em;
+  border-top: 1px solid rgba(110, 127, 153, 0.18);
+  padding-top: 0.7em;
+}
+
+// Embedded Manim videos, soft drop shadow
+video.manim-embed {
+  width: 100%;
+  max-width: 720px;
+  border-radius: 2px;
+  box-shadow: 0 1px 12px rgba(15, 26, 46, 0.10);
+  margin: 1.8em auto 0.6em;
+  display: block;
+  background: $body-bg;
+}
+
+// D3 iframe styling
+iframe.d3-interactive {
+  width: 100%;
+  max-width: 720px;
+  height: 480px;
+  border: 1px solid rgba(110, 127, 153, 0.18);
+  border-radius: 2px;
+  margin: 1.8em auto;
+  display: block;
+  background: $body-bg;
+}
+iframe.cv-slider-frame {
+  height: 640px;
+  box-shadow: 0 1px 12px rgba(15, 26, 46, 0.06);
+}
+
+// Section divider — subtle ornamental rule between major beats
+hr.section-divider {
+  border: none;
+  border-top: 1px solid rgba(107, 79, 142, 0.30);
+  margin: 3em auto 2.2em;
+  width: 60px;
+  position: relative;
+}
+hr.section-divider::after {
+  content: "ρ";
+  position: absolute;
+  top: -0.85em;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $body-bg;
+  padding: 0 0.4em;
+  font-family: $font-family-display;
+  font-style: italic;
+  color: $accent;
+  font-size: 1.1em;
+}
+
+// Inline math styling
+.math.display {
+  font-size: 1.05em;
+  margin: 1.4em 0;
+  padding: 0.6em 1em;
+  background: rgba(107, 79, 142, 0.04);
+  border-left: 2px solid rgba(107, 79, 142, 0.30);
+  border-radius: 1px;
+}
+
+// Code blocks — softer, editorial
+pre.sourceCode {
+  background: #f4f1ea;
+  border-radius: 2px;
+  font-size: 0.92em;
+  border: 1px solid rgba(110, 127, 153, 0.15);
+  padding: 0.9em 1.1em;
+}
+
+code {
+  background: rgba(107, 79, 142, 0.06);
+  padding: 0.08em 0.34em;
+  border-radius: 2px;
+  font-size: 0.92em;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+// Citations, hover tooltip styling
+.citation {
+  color: $accent;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(107, 79, 142, 0.4);
+}
+.citation:hover {
+  background: rgba(107, 79, 142, 0.08);
+  border-bottom-color: $accent;
+}
+
+// Links
+a {
+  color: $accent;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(107, 79, 142, 0.35);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+a:hover {
+  color: $link-hover-color;
+  border-bottom-color: $link-hover-color;
+}
+a.toc-action,
+a.nav-link,
+a.navbar-brand {
+  border-bottom: none;
+}
+
+// Navbar — restrained, editorial
+.navbar {
+  background: $body-bg !important;
+  border-bottom: 1px solid rgba(110, 127, 153, 0.18);
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+}
+
+.navbar .navbar-nav .nav-link {
+  font-family: $font-family-sans-serif;
+  font-size: 0.92em;
+  letter-spacing: 0.02em;
+  color: $primary !important;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+  color: $accent !important;
+}
+
+// Footer
+.nav-footer {
+  font-family: $font-family-sans-serif;
+  font-size: 0.85em;
+  color: $secondary;
+  border-top: 1px solid rgba(110, 127, 153, 0.15);
+  padding: 1.6em 0;
+  margin-top: 3em;
+}
+
+// TOC sidebar, restrained
+#TOC, .toc-sidebar {
+  font-family: $font-family-sans-serif;
+  font-size: 0.86em;
+}
+#TOC a, .toc-sidebar a {
+  color: $secondary;
+  border-bottom: none;
+}
+#TOC a:hover, .toc-sidebar a:hover {
+  color: $accent;
+}
+
+// Selection
+::selection {
+  background: rgba(107, 79, 142, 0.20);
+  color: $body-color;
+}
+
+// Hero image styling for index.qmd's title illustration. The hero is now a
+// looping Manim video (autoplay+muted+loop+playsinline) with the previous PNG
+// kept as a poster fallback so that mobile browsers in low-data mode and
+// reduced-motion viewers see a static image.
+img.hero-illustration,
+video.hero-illustration {
+  width: 100%;
+  max-width: 760px;
+  display: block;
+  margin: 0 auto 1.8em;
+  border-radius: 2px;
+  background: $body-bg;
+}
+video.hero-illustration {
+  box-shadow: 0 1px 12px rgba(15, 26, 46, 0.10);
+  aspect-ratio: 16 / 9;
+}
+
+// ── A1. Reading-progress bar ─────────────────────────────────────────────
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: $accent;
+  z-index: 1100;
+  transition: width 0.05s linear;
+  pointer-events: none;
+}
+
+// ── A2. Headline-number chip ─────────────────────────────────────────────
+.num-chip {
+  font-family: $font-family-display;
+  font-feature-settings: "tnum", "lnum";
+  background: rgba(107, 79, 142, 0.07);
+  border: 1px solid rgba(107, 79, 142, 0.18);
+  border-radius: 3px;
+  padding: 0.04em 0.36em;
+  font-weight: 500;
+  color: $body-color;
+  white-space: nowrap;
+  letter-spacing: 0.005em;
+}
+
+// ── A3. Section dots in navbar ───────────────────────────────────────────
+// Adds a leading dot before each section link. Active section dot is filled
+// with the accent colour; inactive dots are muted.
+.navbar .navbar-nav .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+}
+.navbar .navbar-nav .nav-link::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(107, 79, 142, 0.28);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.navbar .navbar-nav .nav-link:hover::before {
+  background: rgba(107, 79, 142, 0.55);
+  transform: scale(1.25);
+}
+.navbar .navbar-nav .nav-link.active::before,
+.navbar .navbar-nav .nav-link[aria-current="page"]::before {
+  background: $accent;
+  transform: scale(1.25);
+}
+
+// ── A4. Notation glossary block ──────────────────────────────────────────
+.notation-glossary {
+  font-family: $font-family-sans-serif;
+  font-size: 0.92em;
+  background: rgba(107, 79, 142, 0.035);
+  border: 1px solid rgba(107, 79, 142, 0.14);
+  border-radius: 3px;
+  padding: 1em 1.3em;
+  margin: 2.4em 0 1.6em;
+  color: #2c2c2c;
+}
+.notation-glossary p:first-child {
+  margin-top: 0;
+  font-family: $font-family-display;
+  font-weight: 600;
+  color: $headings-color;
+  font-size: 0.95em;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+}
+.notation-glossary table {
+  margin: 0.6em 0 0.2em;
+  font-size: 0.96em;
+  width: 100%;
+  border-collapse: collapse;
+}
+.notation-glossary table th,
+.notation-glossary table td {
+  border: none;
+  border-bottom: 1px solid rgba(107, 79, 142, 0.10);
+  padding: 0.36em 0.4em;
+  text-align: left;
+  vertical-align: top;
+}
+.notation-glossary table th:first-child,
+.notation-glossary table td:first-child {
+  width: 25%;
+  white-space: nowrap;
+}
+
+// ── A5. Section badge row under section heading ──────────────────────────
+.section-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42em;
+  margin: -0.6em 0 1.6em 0;
+  font-family: $font-family-sans-serif;
+  font-size: 0.78em;
+  color: $secondary;
+  letter-spacing: 0.018em;
+}
+.section-badges .badge-pill {
+  background: rgba(107, 79, 142, 0.06);
+  border: 1px solid rgba(107, 79, 142, 0.16);
+  border-radius: 999px;
+  padding: 0.18em 0.78em;
+  white-space: nowrap;
+  font-feature-settings: "tnum", "lnum";
+  color: #3a4055;
+}
+
+// ── B3. Sticky pivot-callout on wide screens ─────────────────────────────
+// On screens wide enough to give us a true sidebar margin (~1180px+), the
+// pivot-callout breaks out of the 720px reading column with negative right
+// margin and sticks while the section scrolls past it. Below 1180px it falls
+// back to its inline Tufte-style left-bordered look.
+@media (min-width: 1180px) {
+  .pivot-callout {
+    position: sticky;
+    top: 4.5rem;
+    margin-right: -16rem;
+    padding-right: 1rem;
+    max-width: 14rem;
+    float: right;
+    clear: right;
+    font-size: 1.05em;
+    background: rgba(107, 79, 142, 0.04);
+    border-left: 3px solid $accent;
+    padding-left: 1.1em;
+    border-radius: 0 2px 2px 0;
+  }
+}
+
+// ── B2. Read-this-equation expander ──────────────────────────────────────
+details.equation-explain {
+  margin: -0.6em 0 1.6em;
+  padding: 0.4em 0.9em 0.55em;
+  background: rgba(107, 79, 142, 0.035);
+  border: 1px solid rgba(107, 79, 142, 0.12);
+  border-radius: 3px;
+  font-family: $font-family-sans-serif;
+  font-size: 0.92em;
+  color: #2c2c2c;
+}
+details.equation-explain[open] {
+  padding-bottom: 1em;
+}
+details.equation-explain > summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: $accent;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.25em 0;
+  letter-spacing: 0.012em;
+  transition: color 0.15s ease;
+}
+details.equation-explain > summary::-webkit-details-marker { display: none; }
+details.equation-explain > summary::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 0.85em;
+  transition: transform 0.18s ease;
+  color: rgba(107, 79, 142, 0.7);
+}
+details.equation-explain[open] > summary::before {
+  transform: rotate(90deg);
+}
+details.equation-explain > summary:hover {
+  color: $link-hover-color;
+}
+details.equation-explain dl {
+  margin: 0.6em 0 0;
+  display: grid;
+  grid-template-columns: minmax(7em, 11em) 1fr;
+  column-gap: 1.1em;
+  row-gap: 0.55em;
+}
+details.equation-explain dt {
+  font-family: $font-family-display;
+  font-style: italic;
+  font-weight: 500;
+  color: $headings-color;
+  font-feature-settings: "lnum";
+}
+details.equation-explain dd {
+  margin: 0;
+  line-height: 1.5;
+  color: #2c2c2c;
+}
+
+// ── Related-work aside (β option) ────────────────────────────────────────
+// Discreet "Read the full paper" call-out near an inline citation. Sans-serif,
+// muted background, narrow left-border in accent. Designed to feel like a
+// Distill-style citation block, visually subordinate to body prose.
+.related-work-note {
+  margin: 1.5em 0 1.8em;
+  padding: 0.7em 1em 0.78em;
+  background: rgba(110, 127, 153, 0.04);
+  border-left: 2px solid rgba(107, 79, 142, 0.32);
+  border-radius: 0 2px 2px 0;
+  font-family: $font-family-sans-serif;
+  font-size: 0.86em;
+  color: #3a4055;
+  line-height: 1.55;
+}
+.related-work-note em {
+  font-family: $font-family-display;
+  font-style: italic;
+  font-weight: 500;
+  color: $headings-color;
+  margin-right: 0.35em;
+}
+.related-work-note a {
+  color: $accent;
+  border-bottom: 1px solid rgba(107, 79, 142, 0.35);
+}
+.related-work-note a:hover {
+  color: $link-hover-color;
+  border-bottom-color: $link-hover-color;
+}
+
+// "Selected related work" block near the closing acknowledgements.
+.selected-work {
+  margin: 2.4em 0 1.6em;
+  padding: 1em 1.2em 1.1em;
+  background: rgba(110, 127, 153, 0.04);
+  border: 1px solid rgba(107, 79, 142, 0.14);
+  border-radius: 3px;
+  font-family: $font-family-sans-serif;
+  font-size: 0.9em;
+  line-height: 1.55;
+  color: #2c2c2c;
+}
+.selected-work > p:first-child em {
+  font-family: $font-family-display;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.96em;
+  color: $headings-color;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  margin-right: 0.4em;
+}
+.selected-work ul {
+  margin: 0.4em 0 0;
+  padding-left: 1.2em;
+}
+.selected-work li {
+  margin-bottom: 0.5em;
+}
+.selected-work li:last-child {
+  margin-bottom: 0;
+}
+
+// ── C1. Interactive ρ_b heatmap (D3) ─────────────────────────────────────
+figure.rho-explorer {
+  margin: 2em 0 0.6em;
+  padding: 1.1em 1.2em 0.9em;
+  background: $body-bg;
+  border: 1px solid rgba(107, 79, 142, 0.18);
+  border-radius: 3px;
+  box-shadow: 0 1px 12px rgba(15, 26, 46, 0.08);
+}
+figure.rho-explorer .rho-explorer-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8em;
+  margin-bottom: 0.7em;
+  font-family: $font-family-sans-serif;
+  font-size: 0.86em;
+  color: #3a4055;
+}
+figure.rho-explorer .rho-band-label {
+  font-family: $font-family-sans-serif;
+  font-size: 0.9em;
+  color: $secondary;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  letter-spacing: 0.012em;
+}
+figure.rho-explorer #rho-band-select {
+  font-family: $font-family-sans-serif;
+  font-size: 0.95em;
+  background: rgba(107, 79, 142, 0.05);
+  border: 1px solid rgba(107, 79, 142, 0.30);
+  border-radius: 3px;
+  padding: 0.18em 0.5em;
+  color: $body-color;
+  cursor: pointer;
+}
+figure.rho-explorer #rho-band-select:focus {
+  outline: 2px solid $accent;
+  outline-offset: 1px;
+}
+figure.rho-explorer .rho-readout {
+  font-family: $font-family-sans-serif;
+  font-size: 0.86em;
+  color: #3a4055;
+  flex: 1 1 60%;
+  text-align: right;
+  min-height: 1.4em;
+}
+figure.rho-explorer .rho-readout code {
+  font-family: $font-family-display;
+  font-feature-settings: "tnum", "lnum";
+  background: rgba(107, 79, 142, 0.08);
+  padding: 0.04em 0.32em;
+  border-radius: 2px;
+  font-size: 0.92em;
+  color: $body-color;
+}
+figure.rho-explorer #rho-heatmap {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+// ── C3. Kernel-MDS scatter (Plotly) ──────────────────────────────────────
+figure.kernel-mds {
+  margin: 1.6em 0 0.8em;
+  padding: 1em 1.2em 0.9em;
+  background: $body-bg;
+  border: 1px solid rgba(107, 79, 142, 0.18);
+  border-radius: 3px;
+  box-shadow: 0 1px 12px rgba(15, 26, 46, 0.06);
+}
+figure.kernel-mds .kernel-mds-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+  margin-bottom: 0.6em;
+  font-family: $font-family-sans-serif;
+}
+figure.kernel-mds .kernel-mds-eyebrow {
+  font-size: 0.78em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $secondary;
+}
+figure.kernel-mds .kernel-mds-controls {
+  display: inline-flex;
+  gap: 0.35em;
+}
+figure.kernel-mds .kernel-mds-btn {
+  background: rgba(107, 79, 142, 0.05);
+  border: 1px solid rgba(107, 79, 142, 0.30);
+  border-radius: 999px;
+  padding: 0.25em 0.85em;
+  font-family: $font-family-sans-serif;
+  font-size: 0.82em;
+  color: #3a4055;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+figure.kernel-mds .kernel-mds-btn:hover {
+  background: rgba(107, 79, 142, 0.10);
+  color: $accent;
+}
+figure.kernel-mds .kernel-mds-btn.is-active {
+  background: $accent;
+  color: $body-bg;
+  border-color: $accent;
+}
+figure.kernel-mds #kernel-mds-plot {
+  width: 100%;
+  min-height: 380px;
+}
+
+// ── B5. Density-matrix panel figure ──────────────────────────────────────
+img.density-matrix-panel {
+  width: 100%;
+  max-width: 720px;
+  display: block;
+  margin: 1.6em auto 0.4em;
+  border-radius: 2px;
+  box-shadow: 0 1px 12px rgba(15, 26, 46, 0.08);
+}
+
+// ── B4. End-of-section floating "next" CTA card ──────────────────────────
+.next-cta-card {
+  position: fixed;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 1080;
+  max-width: 22rem;
+  padding: 0.85em 1.1em 0.95em;
+  background: $body-bg;
+  border: 1px solid rgba(107, 79, 142, 0.30);
+  border-radius: 4px;
+  box-shadow: 0 6px 22px rgba(15, 26, 46, 0.16);
+  font-family: $font-family-sans-serif;
+  font-size: 0.88em;
+  color: $body-color;
+  opacity: 0;
+  transform: translateY(0.6rem);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.next-cta-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.next-cta-card .next-cta-eyebrow {
+  font-size: 0.74em;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: $secondary;
+  margin-bottom: 0.2em;
+}
+.next-cta-card .next-cta-title {
+  font-family: $font-family-display;
+  font-size: 1.05em;
+  font-weight: 600;
+  color: $headings-color;
+  margin-bottom: 0.25em;
+}
+.next-cta-card .next-cta-teaser {
+  color: #3a4055;
+  line-height: 1.4;
+}
+.next-cta-card a {
+  color: $accent;
+  border-bottom: none;
+  font-weight: 500;
+}
+.next-cta-card a:hover {
+  color: $link-hover-color;
+}
+.next-cta-card .next-cta-close {
+  position: absolute;
+  top: 0.3em;
+  right: 0.5em;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: 1.2em;
+  line-height: 1;
+  color: $secondary;
+  padding: 0.1em 0.35em;
+}
+.next-cta-card .next-cta-close:hover {
+  color: $accent;
+}
+
+// ── A6. prefers-reduced-motion guard ─────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.001s !important;
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  #reading-progress { transition: none; }
+}
+
+// "Continue to next section" links at the bottom of each section
+p strong em a,
+p > strong:has(em) a {
+  font-family: $font-family-sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.95em;
+}

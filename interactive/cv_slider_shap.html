@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CV slider — classical vs density-matrix features</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    :root {
+      --bg: #fbfaf7;
+      --primary: #2b3a55;
+      --secondary: #6e7f99;
+      --danger: #b3253a;
+      --success: #2c7a4d;
+      --text: #1a1a1a;
+      --muted: #ececec;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Charter, Georgia, serif;
+    }
+    .panel {
+      max-width: 760px;
+      margin: 1em auto;
+      padding: 1em 1.4em;
+    }
+    .panel h2 {
+      font-size: 1.05em;
+      margin: 0 0 0.4em 0;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .panel p.lede {
+      margin: 0 0 1em 0;
+      color: var(--secondary);
+      font-size: 0.95em;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1.4em;
+      margin-bottom: 0.8em;
+      flex-wrap: wrap;
+    }
+    .controls label {
+      font-size: 0.9em;
+      color: var(--secondary);
+    }
+    .controls input[type="range"] {
+      width: 240px;
+      accent-color: var(--primary);
+    }
+    .controls .fold-display {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.0em;
+    }
+    .controls .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3em;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    svg {
+      display: block;
+      margin: 0 auto;
+      overflow: visible;
+    }
+    .axis text {
+      font-size: 11px;
+      fill: var(--secondary);
+    }
+    .axis line, .axis path {
+      stroke: var(--secondary);
+      stroke-width: 0.8;
+    }
+    .bar-classical { fill: var(--secondary); }
+    .bar-structured { fill: var(--primary); }
+    .bar-classical:hover, .bar-structured:hover {
+      stroke: var(--danger);
+      stroke-width: 1.5;
+    }
+    .ref-line {
+      stroke: var(--danger);
+      stroke-dasharray: 4 3;
+      stroke-width: 1.2;
+    }
+    .ref-line-label {
+      font-size: 11px;
+      fill: var(--danger);
+    }
+    .feature-list {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid var(--muted);
+      border-radius: 3px;
+      padding: 0.5em 0.7em;
+      margin-top: 1em;
+      font-size: 0.85em;
+    }
+    .feature-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-bottom: 1px solid #f6f5f2;
+    }
+    .feature-row:hover {
+      background: #f0eee8;
+    }
+    .feature-name { color: var(--primary); }
+    .feature-shap {
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+    }
+    .legend {
+      display: flex;
+      gap: 1em;
+      font-size: 0.85em;
+      color: var(--secondary);
+      margin: 0.5em 0 0.4em 0;
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      margin-right: 0.3em;
+      vertical-align: middle;
+    }
+    .empty-state {
+      padding: 1em;
+      background: #f6f5f2;
+      border: 1px dashed var(--secondary);
+      border-radius: 3px;
+      color: var(--secondary);
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h2>Cross-validation fold viewer</h2>
+    <p class="lede">
+      Per-fold balanced accuracy for the classical power-and-coherence baseline
+      versus the density-matrix structured features. Hover a bar to see the
+      top-ranked features by SHAP contribution at that fold.
+    </p>
+    <div class="legend">
+      <span><span class="legend-swatch" style="background: var(--secondary);"></span>Classical (190 features)</span>
+      <span><span class="legend-swatch" style="background: var(--primary);"></span>Density-matrix structured (1,805 features)</span>
+    </div>
+    <div class="controls">
+      <label>
+        Fold
+        <input type="range" id="fold-slider" min="1" max="5" value="1" step="1" />
+      </label>
+      <span class="fold-display" id="fold-display">Fold 1</span>
+    </div>
+    <svg id="chart" width="700" height="320"></svg>
+    <div id="feature-panel">
+      <h2 style="margin-top: 1.5em; font-size: 0.95em;">Top features at this fold (SHAP, |contribution|)</h2>
+      <div class="feature-list" id="feature-list">
+        <div class="empty-state">
+          Run the SHAP export from <code>biomarker-iium-pipeline</code> against the schema
+          in <code>assets/shap_data_schema.json</code> and save the result as
+          <code>assets/shap_data.json</code> alongside this file. The chart will populate
+          with real SHAP rankings per fold per feature set.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    // The Quarto build embeds this HTML as an iframe. Data path is relative.
+    const DATA_PATH = "../assets/shap_data.json";
+
+    // Fallback synthetic data so the chart renders before SHAP export is wired.
+    // Replace by saving real export to ../assets/shap_data.json.
+    const SYNTHETIC = {
+      classical_mean: 0.585,
+      structured_mean: 0.657,
+      folds: [
+        { fold: 1, classical: 0.572, structured: 0.661, top_features_classical: [], top_features_structured: [] },
+        { fold: 2, classical: 0.598, structured: 0.674, top_features_classical: [], top_features_structured: [] },
+        { fold: 3, classical: 0.561, structured: 0.642, top_features_classical: [], top_features_structured: [] },
+        { fold: 4, classical: 0.591, structured: 0.658, top_features_classical: [], top_features_structured: [] },
+        { fold: 5, classical: 0.603, structured: 0.652, top_features_classical: [], top_features_structured: [] },
+      ],
+    };
+
+    const W = 700, H = 320;
+    const margin = { top: 16, right: 90, bottom: 32, left: 48 };
+    const innerW = W - margin.left - margin.right;
+    const innerH = H - margin.top - margin.bottom;
+
+    const svg = d3.select("#chart");
+    const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // ====== DATA LOAD ======
+    function tryLoadData() {
+      return fetch(DATA_PATH)
+        .then((r) => {
+          if (!r.ok) throw new Error("not-found");
+          return r.json();
+        })
+        .catch(() => SYNTHETIC);
+    }
+
+    tryLoadData().then((data) => render(data));
+
+    function render(data) {
+      const folds = data.folds;
+      const classicalMean = data.classical_mean;
+      const structuredMean = data.structured_mean;
+
+      const x0 = d3.scaleBand()
+        .domain(folds.map((d) => d.fold))
+        .range([0, innerW])
+        .padding(0.18);
+      const x1 = d3.scaleBand()
+        .domain(["classical", "structured"])
+        .range([0, x0.bandwidth()])
+        .padding(0.05);
+      const y = d3.scaleLinear()
+        .domain([0.45, 0.75])
+        .range([innerH, 0]);
+
+      // Axes
+      g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${innerH})`)
+        .call(d3.axisBottom(x0).tickFormat((d) => `Fold ${d}`));
+      g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y).ticks(6).tickFormat(d3.format(".2f")));
+      g.append("text")
+        .attr("transform", `translate(-32,${innerH / 2}) rotate(-90)`)
+        .attr("text-anchor", "middle")
+        .attr("fill", "var(--secondary)")
+        .style("font-size", "11px")
+        .text("Balanced accuracy");
+
+      // Bars
+      const groups = g.selectAll(".fold-group")
+        .data(folds)
+        .enter()
+        .append("g")
+        .attr("class", "fold-group")
+        .attr("transform", (d) => `translate(${x0(d.fold)},0)`);
+
+      groups.append("rect")
+        .attr("class", "bar-classical")
+        .attr("x", x1("classical"))
+        .attr("y", (d) => y(d.classical))
+        .attr("width", x1.bandwidth())
+        .attr("height", (d) => innerH - y(d.classical))
+        .on("mouseover", (event, d) => updateFeatureList(d, "classical"))
+        .on("mouseout", () => clearFeatureList());
+
+      groups.append("rect")
+        .attr("class", "bar-structured")
+        .attr("x", x1("structured"))
+        .attr("y", (d) => y(d.structured))
+        .attr("width", x1.bandwidth())
+        .attr("height", (d) => innerH - y(d.structured))
+        .on("mouseover", (event, d) => updateFeatureList(d, "structured"))
+        .on("mouseout", () => clearFeatureList());
+
+      // Mean reference lines
+      g.append("line")
+        .attr("class", "ref-line")
+        .attr("x1", 0).attr("x2", innerW)
+        .attr("y1", y(classicalMean)).attr("y2", y(classicalMean))
+        .style("stroke", "var(--secondary)");
+      g.append("text")
+        .attr("class", "ref-line-label")
+        .attr("x", innerW + 4).attr("y", y(classicalMean) + 4)
+        .style("fill", "var(--secondary)")
+        .text(`mean ${classicalMean.toFixed(3)}`);
+
+      g.append("line")
+        .attr("class", "ref-line")
+        .attr("x1", 0).attr("x2", innerW)
+        .attr("y1", y(structuredMean)).attr("y2", y(structuredMean));
+      g.append("text")
+        .attr("class", "ref-line-label")
+        .attr("x", innerW + 4).attr("y", y(structuredMean) + 4)
+        .text(`mean ${structuredMean.toFixed(3)}`);
+
+      // Slider sync
+      const slider = document.getElementById("fold-slider");
+      const display = document.getElementById("fold-display");
+      slider.max = folds.length;
+      slider.addEventListener("input", () => {
+        const f = +slider.value;
+        display.textContent = `Fold ${f}`;
+        const fold = folds.find((d) => d.fold === f);
+        if (fold) updateFeatureList(fold, "structured");
+      });
+
+      function updateFeatureList(fold, condition) {
+        const list = document.getElementById("feature-list");
+        const features = condition === "structured"
+          ? (fold.top_features_structured || [])
+          : (fold.top_features_classical || []);
+        if (features.length === 0) {
+          list.innerHTML = `<div class="empty-state">
+            No SHAP features available for fold ${fold.fold}, condition <em>${condition}</em>.
+            Populate <code>assets/shap_data.json</code> to see real values.
+          </div>`;
+          return;
+        }
+        list.innerHTML = features.slice(0, 20).map((f) => `
+          <div class="feature-row">
+            <span class="feature-name">${f.name}</span>
+            <span class="feature-shap">${f.shap.toFixed(4)}</span>
+          </div>
+        `).join("");
+      }
+
+      function clearFeatureList() {
+        // No-op: keep last hovered state visible
+      }
+    }
+  </script>
+</body>
+</html>

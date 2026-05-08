@@ -1,0 +1,35 @@
+---
+title: "2. The pivot"
+order: 2
+---
+
+::: {.section-badges}
+[8 hypotheses]{.badge-pill} [FDR q = 0.05]{.badge-pill} [Benjamini-Hochberg]{.badge-pill} [Exploratory pivot]{.badge-pill}
+:::
+
+None of the eight pre-specified correlations survived FDR correction. The strongest of them, Spearman r = -0.489 between frontal TBR and the AUFEI Global Executive Function score (N = 25, raw p = 0.013, FDR-corrected p = 0.09), would have cleared an uncorrected alpha and is a medium effect size by Cohen's conventions. Two other TBR-related correlations sat at uncorrected p between 0.022 and 0.054. After Benjamini-Hochberg correction across the eight hypotheses at q = 0.05, none survived. The textbook biomarker, on this cohort, did not generalise.
+
+I checked the result before believing it. Different HAPPE artefact thresholds, different ICA component counts, narrower theta and beta band edges (5 to 7 Hz, 16 to 24 Hz), wider edges (4 to 8, 13 to 30): every robustness check landed in the same place. The point estimates stayed near the literature's mean. The confidence intervals included zero.
+
+So I changed the question. Instead of asking which pre-specified feature correlates with the outcome, the pipeline asked a different one: when a flexible classifier is trained on the full cleaned QEEG vector and 10-fold cross-validated, which features does it actually use? Eight algorithms competed (Random Forest, XGBoost, LightGBM, CatBoost, SVM, KNN, MLP, and a CNN-LSTM), with top-10 mutual-information feature selection inside each fold. SHAP feature-importance values were aggregated across folds for the best model.
+
+The top ten features by mean absolute SHAP were all the same kind of thing: relative beta power. The first three were posterior. Pz (0.0654), P3 (0.0524), O1 (0.0426). Theta/beta ratio did not appear anywhere in the top ten. Coherence did not appear anywhere in the top ten. The classifier was reading off relative beta power across the back of the head.
+
+::: {.figure-caption}
+**Figure 2.** The eight pre-specified correlations as a forest plot, with raw and FDR-corrected p-values. The strongest, frontal TBR ↔ Global EF, is marginal at uncorrected alpha and is the textbook prediction. None survives FDR correction at q = 0.05. Below the forest, the SHAP top-10 from the trained classifier are shown as a separate panel. They are a different kind of evidence, not a hypothesis test but a description of what the classifier ended up using. All ten are relative beta power, posterior-dominant.
+:::
+
+```{=html}
+<video class="manim-embed" controls loop muted playsinline preload="metadata">
+  <source src="../assets/03_fdr_matrix.mp4" type="video/mp4">
+  <p>The render exists at <code>assets/03_fdr_matrix.mp4</code>.</p>
+</video>
+```
+
+::: {.pivot-callout}
+The right interpretation of this is not that the TBR literature is wrong. The right interpretation is that the field's biomarker is one specific feature of a much richer signal, and the rest of the signal carries information the field has been throwing away. The hypothesis test we pre-registered was the wrong question. The right question is what a feature space of the right shape would look like.
+:::
+
+The single-cohort caveat is real and I will repeat it in Section 4. N = 28, one site, one developmental window, one exploratory analysis after a failed confirmatory one. The pilot is not a refutation. The pilot is an empirical reason to ask whether there is a feature space in which the signal would be larger, more stable, and more interpretable than what the textbook gives us. The next section builds that feature space and runs an honest comparison.
+
+[**→ Continue to Section 3: The density matrix**](04-density-matrix.qmd)

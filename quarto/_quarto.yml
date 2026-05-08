@@ -1,0 +1,180 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - assets/
+    - interactive/
+
+website:
+  title: "The Density Matrix in Your Brainwaves"
+  description: "What a borrowed mathematical formalism reveals about inference under bounded computational precision"
+  # site-url currently points to the GitHub Pages URL; swap to the custom
+  # density-matrix.science / habiburahman.io domain after DNS is configured
+  # and a CNAME file is committed to the gh-pages branch.
+  site-url: https://yazidryuichi.github.io/density-matrix-brainwaves
+  repo-url: https://github.com/Yazidryuichi/density-matrix-brainwaves
+  open-graph: true
+  twitter-card:
+    card-style: summary_large_image
+    creator: "@yazidh"
+  navbar:
+    background: light
+    pinned: false
+    left:
+      - href: index.qmd
+        text: "Hook"
+      - href: sections/02-classical.qmd
+        text: "1. The classical view"
+      - href: sections/03-pivot.qmd
+        text: "2. The pivot"
+      - href: sections/04-density-matrix.qmd
+        text: "3. The density matrix"
+      - href: sections/05-closing.qmd
+        text: "4. What this opens up"
+    right:
+      - icon: github
+        href: https://github.com/Yazidryuichi/biomarker-iium-pipeline
+        aria-label: GitHub repo
+  page-footer:
+    left: |
+      Yazid Habiburahman · 2026
+    right: |
+      Built with [Quarto](https://quarto.org)
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles.scss]
+      dark: [darkly, styles.scss]
+    toc: true
+    toc-depth: 2
+    toc-location: right
+    code-fold: true
+    code-link: true
+    code-tools: false
+    fontsize: 1.05em
+    linestretch: 1.65
+    fig-cap-location: bottom
+    page-layout: article
+    citations-hover: true
+    crossrefs-hover: true
+    smooth-scroll: true
+    anchor-sections: true
+    link-external-newwindow: true
+    mainfont: "Charter, Georgia, serif"
+    monofont: "JetBrains Mono, ui-monospace, monospace"
+    include-in-header:
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+    include-after-body:
+      - text: |
+          <script>
+          (function () {
+            // A1: reading-progress bar
+            var bar = document.createElement('div');
+            bar.id = 'reading-progress';
+            bar.setAttribute('aria-hidden', 'true');
+            document.body.prepend(bar);
+            function update() {
+              var max = document.documentElement.scrollHeight - window.innerHeight;
+              var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+              bar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+            }
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+
+            // A6: respect prefers-reduced-motion for Manim videos
+            try {
+              if (window.matchMedia &&
+                  window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelectorAll('video.manim-embed, video.hero-illustration').forEach(function (v) {
+                  v.removeAttribute('loop');
+                  v.removeAttribute('autoplay');
+                  try { v.pause(); } catch (e) { /* no-op */ }
+                });
+              }
+            } catch (e) { /* no-op */ }
+
+            // B4: floating next-section CTA card
+            var path = (window.location.pathname || '').replace(/\/$/, '');
+            var key = path.split('/').pop() || 'index.html';
+            var routes = {
+              'index.html': {
+                href: 'sections/02-classical.html',
+                eyebrow: 'Section 1 of 4 · Up next',
+                title: 'The classical view',
+                teaser: 'Theta/beta ratio is the textbook biomarker. The published evidence is more complicated than the clinical protocols let on.'
+              },
+              '02-classical.html': {
+                href: '03-pivot.html',
+                eyebrow: 'Section 2 of 4 · Up next',
+                title: 'The pivot',
+                teaser: 'None of the eight pre-specified correlations survived FDR correction. The textbook biomarker, on this cohort, did not generalise.'
+              },
+              '03-pivot.html': {
+                href: '04-density-matrix.html',
+                eyebrow: 'Section 3 of 4 · Up next',
+                title: 'The density matrix as a feature',
+                teaser: 'A linear classifier on the entries of ρ beats the classical QEEG menu by an AUC gap of 0.165 on the same data.'
+              },
+              '04-density-matrix.html': {
+                href: '05-closing.html',
+                eyebrow: 'Section 4 of 4 · Up next',
+                title: 'What this opens up',
+                teaser: 'Three candidate explanations for the density-matrix gap, and one now looks more likely than the others.'
+              },
+              '05-closing.html': {
+                href: 'https://github.com/Yazidryuichi/biomarker-iium-pipeline',
+                eyebrow: 'Code & data',
+                title: 'biomarker-iium-pipeline',
+                teaser: 'Full pipeline including Stage 6 density-matrix module, pre-registration, and the canonical progress report.'
+              }
+            };
+            var route = routes[key];
+            if (!route) return;
+            try {
+              if (sessionStorage.getItem('next-cta-dismissed:' + key) === '1') return;
+            } catch (e) { /* sessionStorage may be blocked */ }
+
+            var card = document.createElement('aside');
+            card.className = 'next-cta-card';
+            card.setAttribute('role', 'complementary');
+            card.setAttribute('aria-label', 'Up next');
+            card.innerHTML =
+              '<button class="next-cta-close" type="button" aria-label="Dismiss">×</button>' +
+              '<div class="next-cta-eyebrow">' + route.eyebrow + '</div>' +
+              '<div class="next-cta-title"><a href="' + route.href + '">' + route.title + ' →</a></div>' +
+              '<div class="next-cta-teaser">' + route.teaser + '</div>';
+            document.body.appendChild(card);
+
+            card.querySelector('.next-cta-close').addEventListener('click', function () {
+              card.classList.remove('visible');
+              try { sessionStorage.setItem('next-cta-dismissed:' + key, '1'); }
+              catch (e) { /* no-op */ }
+            });
+
+            function maybeShow() {
+              var max = document.documentElement.scrollHeight - window.innerHeight;
+              if (max <= 0) return;
+              var pct = window.scrollY / max;
+              if (pct > 0.80) {
+                card.classList.add('visible');
+              } else if (pct < 0.65) {
+                card.classList.remove('visible');
+              }
+            }
+            window.addEventListener('scroll', maybeShow, { passive: true });
+            window.addEventListener('resize', maybeShow);
+            maybeShow();
+          })();
+          </script>
+
+bibliography: references.bib
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+
+execute:
+  freeze: auto
+  echo: false
+  warning: false
+  message: false

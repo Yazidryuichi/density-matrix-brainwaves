@@ -1,0 +1,57 @@
+name: Publish Quarto site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.9.37
+
+      - name: Render
+        working-directory: quarto
+        run: quarto render
+
+      - name: Ensure interactive subfolder is copied
+        # Belt-and-braces: quarto's `resources` directive does not always pick
+        # up new files in the interactive/ folder on first build, so we copy
+        # explicitly. The interactive/ folder contains the CV-slider iframe.
+        working-directory: quarto
+        run: |
+          mkdir -p _site/interactive
+          cp -R interactive/. _site/interactive/
+
+      - name: Ensure asset JSON/PNG files are copied
+        # Same belt-and-braces for the data assets the D3 / Plotly / iframe
+        # widgets fetch at runtime.
+        working-directory: quarto
+        run: |
+          mkdir -p _site/assets
+          cp -R assets/. _site/assets/
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: quarto/_site
+          publish_branch: gh-pages
+          enable_jekyll: false
+          # Carry the commit message of the source push for traceability.
+          commit_message: 'Publish ${{ github.sha }} from ${{ github.ref_name }}'
