@@ -27,7 +27,7 @@ The top ten features by mean absolute SHAP were all the same kind of thing: rela
 ```
 
 ::: {.pivot-callout}
-The right interpretation of this is not that the TBR literature is wrong. The right interpretation is that the field's biomarker is one specific feature of a much richer signal, and the rest of the signal carries information the field has been throwing away. The hypothesis test we pre-registered was the wrong question. The right question is what a feature space of the right shape would look like.
+The right interpretation of this is not that the TBR literature is wrong. The right interpretation is that the field's biomarker is one specific feature of a much richer signal, and the rest of the signal carries information the field has been throwing away. The hypothesis test we pre-specified was the wrong question. The right question is what a feature space of the right shape would look like.
 :::
 
 The single-cohort caveat is real and I will repeat it in Section 4. N = 28, one site, one developmental window, one exploratory analysis after a failed confirmatory one. The pilot is not a refutation. The pilot is an empirical reason to ask whether there is a feature space in which the signal would be larger, more stable, and more interpretable than what the textbook gives us. The next section builds that feature space and runs an honest comparison.

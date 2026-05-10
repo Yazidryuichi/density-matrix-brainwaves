@@ -2,9 +2,9 @@
 title: "The Density Matrix in Your Brainwaves"
 subtitle: "What a borrowed mathematical formalism reveals about inference under bounded computational precision"
 author: "Yazid Habiburahman"
-date: "2026-06-02"
+date: "2026-05-09"
 date-format: "MMMM YYYY"
-description: "A 28-child paediatric EEG pilot. The pre-registered confirmatory test on the textbook frontal theta/beta-ratio biomarker did not survive correction. A density matrix built directly from the multichannel analytic signal recovered information the classical QEEG menu was discarding."
+description: "A 28-child paediatric EEG pilot. The pre-specified confirmatory test on the textbook frontal theta/beta-ratio biomarker did not survive correction. A density matrix built directly from the multichannel analytic signal recovered information the classical QEEG menu was discarding."
 ---
 
 ```{=html}
@@ -22,11 +22,11 @@ description: "A 28-child paediatric EEG pilot. The pre-registered confirmatory t
 
 ::: {.first-letter}
 
-In an Indonesian primary school, a child sits in front of a laptop with fifteen wet electrodes on her scalp. She closes her eyes during a resting-state recording. Somewhere on the recording laptop, a Python script is logging her EEG at 250 Hz. Twenty-seven other children, ages six to twelve, contributed to the same dataset.
+In an Indonesian primary school, a child sits in front of a laptop with fifteen wet electrodes on her scalp. She closes her eyes during a resting-state recording. Somewhere on the recording laptop, a Python script is logging her EEG at 250 Hz. Another twenty-seven children, ages six to twelve, contributed to the same dataset.
 
 :::
 
-The data she produced has been analysed under the same protocol that defines paediatric-EEG biomarker work. The pre-registered confirmatory test on her cohort, between the textbook frontal theta/beta ratio and an executive-function score, did not survive correction.
+The data she produced has been analysed under the same protocol that defines paediatric-EEG biomarker work. The pre-specified confirmatory test on her cohort, between the textbook frontal theta/beta ratio and an executive-function score, did not survive correction.
 
 The literature is not wrong. Four decades of replication established that the ratio carries real signal. What the same four decades also did was collapse a rich multidimensional signal into a single ratio, and then teach the field that the ratio was the signal. It is not. The ratio is one projection of a much larger object, and the rest of that object carries information the textbook menu has been systematically discarding.
 

@@ -33,11 +33,11 @@ website:
         text: "4. What this opens up"
     right:
       - icon: github
-        href: https://github.com/Yazidryuichi/biomarker-iium-pipeline
-        aria-label: GitHub repo
+        href: https://github.com/Yazidryuichi/density-matrix-brainwaves
+        aria-label: GitHub source for this site
   page-footer:
     left: |
-      Yazid Habiburahman · 2026
+      Yazid Habiburahman · [yazidburahmen@gmail.com](mailto:yazidburahmen@gmail.com) · 2026
     right: |
       Built with [Quarto](https://quarto.org)
 
