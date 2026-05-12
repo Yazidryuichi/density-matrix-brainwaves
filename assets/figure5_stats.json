@@ -1,0 +1,48 @@
+{
+  "n_subjects": 28,
+  "n_folds_total": 100,
+  "wilcoxon_dm_svm_vs_classical_rf": {
+    "bacc": {
+      "w": 2193.0,
+      "p": 0.24866725086226293
+    },
+    "auc": {
+      "w": 1721.0,
+      "p": 0.005030301828963725
+    }
+  },
+  "boot_ci": [
+    {
+      "model": "DM linear SVM",
+      "set": "density_matrix",
+      "auc_mean": 0.78,
+      "auc_ci_lo": 0.71,
+      "auc_ci_hi": 0.845,
+      "bacc_mean": 0.6575,
+      "bacc_ci_lo": 0.6025,
+      "bacc_ci_hi": 0.7075
+    },
+    {
+      "model": "DM Random Forest",
+      "set": "density_matrix",
+      "auc_mean": 0.755,
+      "auc_ci_lo": 0.685,
+      "auc_ci_hi": 0.82,
+      "bacc_mean": 0.6425,
+      "bacc_ci_lo": 0.5875,
+      "bacc_ci_hi": 0.6975
+    },
+    {
+      "model": "Classical RF",
+      "set": "classical",
+      "auc_mean": 0.615,
+      "auc_ci_lo": 0.535,
+      "auc_ci_hi": 0.695,
+      "bacc_mean": 0.6175,
+      "bacc_ci_lo": 0.5625,
+      "bacc_ci_hi": 0.6725
+    }
+  ],
+  "headline_delta_auc_mean": 0.16500000000000004,
+  "headline_delta_bacc_mean": 0.039999999999999925
+}
