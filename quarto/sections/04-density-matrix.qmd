@@ -328,15 +328,15 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
 **Figure 5.** Mean ROC AUC across five classifiers under the same matched 10-fold × 10 cross-validation, N = 28. The two kernel routes to the density matrix (red) sit on either side of the random-classifier line at 0.50, while the direct-feature classifiers (purple) cluster well above the classical baseline (teal). The dashed vertical rule marks chance performance.
 :::
 
-The right reading of this is not that the kernel-equivalence is wrong as a theorem. It is that the encoding circuit in Stage 5 is a lossy projection. It compresses 258 quantum-inspired summary features through PCA to six dimensions and rescales them to $[0, \pi]$ before encoding. None of those steps preserve the off-diagonal complex structure that the explicit density matrix exposes. The explicit features beat both kernels because the kernels were never operating on the right object.
+The two kernels reach below the chance line for different reasons, and the right reading needs both. The parameterised quantum-circuit kernel runs on the Stage 5 quantum-inspired summary features, which are first compressed through PCA to six dimensions and rescaled to $[0, \pi]$ before encoding; none of those steps preserve the off-diagonal complex structure that the explicit density matrix exposes, so the QSVM is operating on a lossy projection. The Hilbert-Schmidt kernel, by contrast, reads $\rho$ directly without PCA. At $N = 28$ with the binarised executive-function outcome the 95% bootstrap CI on AUC = 0.395 overlaps the 0.5 chance line, so whether that score reflects a structured anti-alignment between the cohort-mean fidelity geometry and the median split or sub-sample variance at this $N$ is exactly what the ds004284 replication is designed to test. What the explicit-feature result shows is more limited and more defensible: on this cohort and at this scale, the entries of $\rho$ carry information that survives explicit feature extraction in a way the similarity-matrix view does not.
 
 ```{=html}
 <figure class="kernel-mds" aria-labelledby="kernel-mds-title">
   <figcaption id="kernel-mds-title" class="kernel-mds-toolbar">
     <span class="kernel-mds-eyebrow">Subject geometry under each kernel</span>
     <span class="kernel-mds-controls" role="group" aria-label="Choose kernel">
-      <button type="button" class="kernel-mds-btn is-active" data-emb="hilbert_schmidt">Hilbert-Schmidt kernel on ρ</button>
-      <button type="button" class="kernel-mds-btn" data-emb="flat_features">Linear kernel on flat features</button>
+      <button type="button" class="kernel-mds-btn" data-emb="hilbert_schmidt">Hilbert-Schmidt kernel on ρ</button>
+      <button type="button" class="kernel-mds-btn is-active" data-emb="flat_features">Linear kernel on flat features</button>
     </span>
   </figcaption>
   <div id="kernel-mds-plot" role="img" aria-label="Two-dimensional metric MDS scatter of the 28 subjects under either the Hilbert-Schmidt kernel on ρ or the linear kernel on the flat density-matrix features. Subjects coloured by the median split on Global Executive Function score."></div>
@@ -396,7 +396,7 @@ The right reading of this is not that the kernel-equivalence is wrong as a theor
     };
     var config = { displayModeBar: false, responsive: true };
 
-    Plotly.newPlot("kernel-mds-plot", buildTraces("hilbert_schmidt"),
+    Plotly.newPlot("kernel-mds-plot", buildTraces("flat_features"),
                     layout, config);
 
     var btns = document.querySelectorAll(".kernel-mds-btn");
@@ -419,7 +419,7 @@ The right reading of this is not that the kernel-equivalence is wrong as a theor
 ```
 
 ::: {.figure-caption}
-**Figure 6.** Two-dimensional metric-MDS embedding of the 28 subjects under each kernel, coloured by the median split on Global Executive Function. The Hilbert-Schmidt embedding scatters the two groups with substantial overlap; the linear-kernel embedding on the flat density-matrix features (after standardisation) shows a more separable layout. The geometry is the visualisation of the AUC contrast in Figure 5.
+**Figure 6.** Two-dimensional metric-MDS embedding of the 28 subjects under each kernel, coloured by the median split on Global Executive Function. The linear-kernel embedding on the flat density-matrix features (after standardisation), shown first, separates the two groups more cleanly; clicking through to the Hilbert-Schmidt embedding shows substantial overlap between groups under the fidelity geometry. The geometry is the visualisation of the AUC contrast in Figure 5.
 :::
 
 ```{=html}

@@ -7,6 +7,15 @@ date-format: "MMMM YYYY"
 description: "A 28-child paediatric EEG pilot. The pre-specified confirmatory test on the textbook frontal theta/beta-ratio biomarker did not survive correction. A density matrix built directly from the multichannel analytic signal recovered information the classical QEEG menu was discarding."
 ---
 
+::: {.headline-summary}
+**The headline, in three lines.**
+
+- A pre-specified confirmatory test on the textbook frontal theta/beta-ratio biomarker failed FDR correction at $N = 28$ paediatric resting-state EEG, Indonesia.
+- An exploratory density-matrix feature space, built directly from the multichannel analytic signal, reached mean balanced accuracy [0.657]{.num-chip} and ROC AUC [0.780]{.num-chip} under matched 10-fold × 10 cross-validation; the best classical-QEEG classifier on the same children reached [0.618]{.num-chip} / [0.615]{.num-chip}.
+- Single-cohort pilot. Replication queued on the OpenNeuro ds004284 paediatric cohort. The full AUC comparison sits at [Figure 5](sections/04-density-matrix.qmd#auc-comparison-chart).
+
+:::
+
 ```{=html}
 <video class="hero-illustration" autoplay loop muted playsinline preload="metadata"
        poster="assets/00_hero.png"

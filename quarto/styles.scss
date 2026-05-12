@@ -123,6 +123,55 @@ h2:first-of-type {
   text-transform: none;
 }
 
+// Above-the-fold three-line summary on the index. The 30-second supervisor's
+// path: read this, decide whether to invest the 12 minutes. Hairline rules
+// top and bottom, no side stripe.
+.headline-summary {
+  font-family: $font-family-serif;
+  font-size: 1.02em;
+  line-height: 1.55;
+  color: #1a2138;
+  margin: 1.6em 0 2.4em 0;
+  padding: 1.3em 0 1.3em 0;
+  border-top: 1px solid rgba(110, 127, 153, 0.4);
+  border-bottom: 1px solid rgba(110, 127, 153, 0.4);
+
+  > p:first-child {
+    font-family: $font-family-sans-serif;
+    font-size: 0.78em;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: $secondary;
+    margin-bottom: 0.65em;
+
+    strong { font-weight: 600; color: $secondary; }
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+
+    li {
+      position: relative;
+      padding-left: 1.5em;
+      margin-bottom: 0.7em;
+
+      &::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: $accent;
+        font-family: $font-family-sans-serif;
+        font-weight: 600;
+      }
+
+      &:last-child { margin-bottom: 0; }
+    }
+  }
+}
+
 // Figure captions, italic editorial
 .figure-caption {
   font-family: $font-family-serif;
