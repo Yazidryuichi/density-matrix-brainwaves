@@ -222,7 +222,7 @@ The result is a Hermitian, positive semi-definite, trace-one $15 \times 15$ comp
 
 For each subject and band, I flatten the matrix into a real feature vector. Fifteen real diagonals plus the real and imaginary parts of the 105 strict upper-triangle entries gives 225 reals per band, 900 features in total at $N = 15$. The $(\mathrm{Re}, \mathrm{Im})$ decomposition is mathematically equivalent to magnitude and phase but avoids the cyclic-angle pathology that breaks linear classifiers on phase. A linear SVM with top-ten ANOVA feature selection inside each fold runs under repeated stratified 10-fold cross-validation, ten repeats, fixed seed, the same fold indices reused for every model on every feature set. On the same twenty-eight children, that classifier reaches a mean balanced accuracy of [0.657]{.num-chip} and a mean ROC AUC of [0.780]{.num-chip}.
 
-For comparison, I ran the same children through the standard QEEG menu under the same cross-validation: absolute and relative band power, frontal alpha asymmetry, theta/beta ratio, fronto-parietal coherence, alpha reactivity, and band-limited covariance, 622 features in total. The best classifier on that feature set is a Random Forest at [0.618]{.num-chip} mean balanced accuracy, [0.615]{.num-chip} ROC AUC. On the same data, the density-matrix features pull the AUC from 0.615 to 0.780.
+For comparison, I ran the same children through the standard QEEG menu under the same cross-validation: absolute and relative band power, frontal alpha asymmetry, theta/beta ratio, fronto-parietal coherence, alpha reactivity, and band-limited covariance, 622 features in total. The best classifier on that feature set is a Random Forest at [0.618]{.num-chip} mean balanced accuracy, [0.615]{.num-chip} ROC AUC. On the same data, the density-matrix features pull the AUC from 0.615 to 0.780. The 95% bootstrap confidence intervals on the means do not overlap (DM-SVM [0.71, 0.85]; classical-RF [0.54, 0.70]), and a paired Wilcoxon test across the 100 matched folds gives $W = 1721$, $p = 0.005$ on AUC. On balanced accuracy the gap is smaller and not distinguishable from zero at this $N$ ($W = 2193$, $p = 0.25$) because balanced accuracy at $N = 28$ takes a small set of discrete values, but the AUC contrast survives the paired test on the same folds.
 
 The density matrix also appears in supervised quantum machine learning, but as a fidelity kernel rather than a feature. By Schuld's 2021 result on the kernel-equivalence of supervised quantum models [@schuld2021], a quantum-kernel SVM with feature map $|\psi(x)\rangle$ computes pairwise similarities as squared overlaps:
 
@@ -265,11 +265,11 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
       "color": "#0f1a2e", "anchor": "start", "frame": "group", "offset": 6
     },
     "data": { "values": [
-      { "model": "SVM linear · density-matrix",           "auc": 0.780, "set": "Density matrix as feature" },
-      { "model": "RandomForest · density-matrix",         "auc": 0.755, "set": "Density matrix as feature" },
-      { "model": "RandomForest · classical QEEG menu",    "auc": 0.615, "set": "Classical baseline" },
-      { "model": "QSVM-6q-ZZ · quantum features (Stage 5)", "auc": 0.525, "set": "Kernel proxy" },
-      { "model": "Hilbert-Schmidt SVM · density-matrix",  "auc": 0.395, "set": "Kernel proxy" }
+      { "model": "SVM linear · density-matrix",           "auc": 0.780, "auc_lo": 0.71,  "auc_hi": 0.85,  "set": "Density matrix as feature" },
+      { "model": "RandomForest · density-matrix",         "auc": 0.755, "auc_lo": 0.685, "auc_hi": 0.82,  "set": "Density matrix as feature" },
+      { "model": "RandomForest · classical QEEG menu",    "auc": 0.615, "auc_lo": 0.535, "auc_hi": 0.695, "set": "Classical baseline" },
+      { "model": "QSVM-6q-ZZ · quantum features (Stage 5)", "auc": 0.525, "auc_lo": null,  "auc_hi": null,  "set": "Kernel proxy" },
+      { "model": "Hilbert-Schmidt SVM · density-matrix",  "auc": 0.395, "auc_lo": null,  "auc_hi": null,  "set": "Kernel proxy" }
     ] },
     "layer": [
       { "mark": { "type": "rule", "stroke": "#9aa3b3", "strokeDash": [3, 3] },
@@ -283,8 +283,8 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
                             "domain": false, "ticks": false,
                             "labelColor": "#1f1f1f" } },
           "x": { "field": "auc", "type": "quantitative",
-                  "scale": { "domain": [0.35, 0.82] },
-                  "axis": { "title": "Mean ROC AUC", "titleFont": "IBM Plex Sans, sans-serif",
+                  "scale": { "domain": [0.35, 0.88] },
+                  "axis": { "title": "Mean ROC AUC (bars · 95% bootstrap CI where shown)", "titleFont": "IBM Plex Sans, sans-serif",
                             "titleColor": "#3a4055", "titleFontSize": 11,
                             "labelFontSize": 10, "labelColor": "#3a4055",
                             "format": ".2f", "tickCount": 5,
@@ -298,7 +298,26 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
                                   "labelColor": "#3a4055", "symbolSize": 80,
                                   "rowPadding": 4, "padding": 6 } }
         } },
-      { "mark": { "type": "text", "align": "left", "baseline": "middle", "dx": 5,
+      { "transform": [ {"filter": "datum.auc_lo != null"} ],
+        "mark": { "type": "rule", "color": "#1f1f1f", "opacity": 0.85, "size": 1.6 },
+        "encoding": {
+          "y": { "field": "model", "type": "nominal", "sort": "-x" },
+          "x":  { "field": "auc_lo", "type": "quantitative" },
+          "x2": { "field": "auc_hi" }
+        } },
+      { "transform": [ {"filter": "datum.auc_lo != null"} ],
+        "mark": { "type": "tick", "color": "#1f1f1f", "opacity": 0.85, "size": 8, "thickness": 1.6, "orient": "vertical" },
+        "encoding": {
+          "y": { "field": "model", "type": "nominal", "sort": "-x" },
+          "x": { "field": "auc_lo", "type": "quantitative" }
+        } },
+      { "transform": [ {"filter": "datum.auc_lo != null"} ],
+        "mark": { "type": "tick", "color": "#1f1f1f", "opacity": 0.85, "size": 8, "thickness": 1.6, "orient": "vertical" },
+        "encoding": {
+          "y": { "field": "model", "type": "nominal", "sort": "-x" },
+          "x": { "field": "auc_hi", "type": "quantitative" }
+        } },
+      { "mark": { "type": "text", "align": "left", "baseline": "middle", "dx": 7,
                    "fontSize": 11, "font": "Fraunces, Crimson Pro, Charter, serif",
                    "fontWeight": 500, "color": "#1f1f1f" },
         "encoding": {
@@ -325,7 +344,7 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
 ```
 
 ::: {.figure-caption}
-**Figure 5.** Mean ROC AUC across five classifiers under the same matched 10-fold × 10 cross-validation, N = 28. The two kernel routes to the density matrix (red) sit on either side of the random-classifier line at 0.50, while the direct-feature classifiers (purple) cluster well above the classical baseline (teal). The dashed vertical rule marks chance performance.
+**Figure 5.** Mean ROC AUC across five classifiers under the same matched 10-fold × 10 cross-validation, $N = 28$. Whiskers on the top three bars are 95% bootstrap CIs over 10 000 resamples of the 100 per-fold AUCs; the two kernel proxies are mean only because per-fold AUCs were not retained by the original Stage 5 / Hilbert-Schmidt evaluators and the rerun is queued for the next pipeline build. The two kernel routes to the density matrix (red) sit on either side of the random-classifier line at 0.50, while the direct-feature classifiers (purple) cluster well above the classical baseline (teal); the DM-SVM and classical-RF intervals do not overlap. The dashed vertical rule marks chance performance.
 :::
 
 The two kernels reach below the chance line for different reasons, and the right reading needs both. The parameterised quantum-circuit kernel runs on the Stage 5 quantum-inspired summary features, which are first compressed through PCA to six dimensions and rescaled to $[0, \pi]$ before encoding; none of those steps preserve the off-diagonal complex structure that the explicit density matrix exposes, so the QSVM is operating on a lossy projection. The Hilbert-Schmidt kernel, by contrast, reads $\rho$ directly without PCA. At $N = 28$ with the binarised executive-function outcome the 95% bootstrap CI on AUC = 0.395 overlaps the 0.5 chance line, so whether that score reflects a structured anti-alignment between the cohort-mean fidelity geometry and the median split or sub-sample variance at this $N$ is exactly what the ds004284 replication is designed to test. What the explicit-feature result shows is more limited and more defensible: on this cohort and at this scale, the entries of $\rho$ carry information that survives explicit feature extraction in a way the similarity-matrix view does not.
