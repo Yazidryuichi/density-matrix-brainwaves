@@ -4,7 +4,11 @@ order: 3
 ---
 
 ::: {.section-badges}
-[Stage 6]{.badge-pill} [Hilbert → ρ → linear SVM]{.badge-pill} [10-fold × 10 CV]{.badge-pill} [N = 28]{.badge-pill}
+[Stage 5 fair comparison]{.badge-pill} [Hilbert → ρ → linear SVM]{.badge-pill} [10-fold × 10 CV + LOSO]{.badge-pill} [N = 28 pilot]{.badge-pill}
+:::
+
+::: {.callout-note}
+**At this scale.** This is a pilot at N = 28. Under permutation testing, no cell — including density-matrix features — is significantly above chance at the conventional α = 0.05 threshold; the best cells sit at p ≈ 0.08. The "fair comparison" subsection at the end of this section runs density-matrix features against classical QEEG features under matched 2×2 design (feature set × model class) with subject-level leave-one-out and paired DeLong tests; that is the version a methods-sensitive reader should weight. Replication at N = 100 and on OpenNeuro ds004284 is the test that matters. Numbers in this section are reported for transparency about pilot-stage method development, not as established findings.
 :::
 
 The pivot in Section 2 ended on a question. What does a feature space of the right shape look like for this signal? Theta/beta ratio is one specific reduction of a much richer object. The classifier that survived cross-validation was reading off relative beta power across the back of the head, but the deeper observation is that the cleaned EEG carries cross-channel and cross-frequency structure the textbook power-and-coherence menu collapses into pairwise scalars. The density matrix is the smallest object I know that keeps that structure intact.
@@ -222,7 +226,9 @@ The result is a Hermitian, positive semi-definite, trace-one $15 \times 15$ comp
 
 For each subject and band, I flatten the matrix into a real feature vector. Fifteen real diagonals plus the real and imaginary parts of the 105 strict upper-triangle entries gives 225 reals per band, 900 features in total at $N = 15$. The $(\mathrm{Re}, \mathrm{Im})$ decomposition is mathematically equivalent to magnitude and phase but avoids the cyclic-angle pathology that breaks linear classifiers on phase. A linear SVM with top-ten ANOVA feature selection inside each fold runs under repeated stratified 10-fold cross-validation, ten repeats, fixed seed, the same fold indices reused for every model on every feature set. On the same twenty-eight children, that classifier reaches a mean balanced accuracy of [0.657]{.num-chip} and a mean ROC AUC of [0.780]{.num-chip}.
 
-For comparison, I ran the same children through the standard QEEG menu under the same cross-validation: absolute and relative band power, frontal alpha asymmetry, theta/beta ratio, fronto-parietal coherence, alpha reactivity, and band-limited covariance, 622 features in total. The best classifier on that feature set is a Random Forest at [0.618]{.num-chip} mean balanced accuracy, [0.615]{.num-chip} ROC AUC. On the same data, the density-matrix features pull the AUC from 0.615 to 0.780. The 95% bootstrap confidence intervals on the means do not overlap (DM-SVM [0.71, 0.85]; classical-RF [0.54, 0.70]), and a paired Wilcoxon test across the 100 matched folds gives $W = 1721$, $p = 0.005$ on AUC. On balanced accuracy the gap is smaller and not distinguishable from zero at this $N$ ($W = 2193$, $p = 0.25$) because balanced accuracy at $N = 28$ takes a small set of discrete values, but the AUC contrast survives the paired test on the same folds.
+For comparison, I ran the same children through the standard QEEG menu under the same cross-validation: absolute and relative band power, frontal alpha asymmetry, theta/beta ratio, fronto-parietal coherence, alpha reactivity, and band-limited covariance, 622 features in total. The best per-fold classifier on that feature set is a Random Forest at [0.618]{.num-chip} mean balanced accuracy, [0.615]{.num-chip} ROC AUC. On the same data, the density-matrix features pull the per-fold mean AUC from 0.615 to 0.780.
+
+That headline contrast, however, was the first version of this section and put DM features under one model class (linear SVM) against classical features under a different model class (shallow Random Forest). The original Stage 5 script also used per-fold bootstrap CIs (resampling 100 folds, n_subjects = 28) and a per-fold Wilcoxon test that treated correlated folds as independent — both produce CIs and p-values that are too tight at small N. The honest re-run is in the "Fair comparison" subsection at the end of this section; it leaves the numerical gap intact under the matched-SVM comparison but reveals that the DM-vs-classical contrast is sensitive to the classical-side model choice (it does not survive under matched RF), and that the subject-level 95% CIs on AUC are 2-3× wider than originally reported and do overlap.
 
 The density matrix also appears in supervised quantum machine learning, but as a fidelity kernel rather than a feature. By Schuld's 2021 result on the kernel-equivalence of supervised quantum models [@schuld2021], a quantum-kernel SVM with feature map $|\psi(x)\rangle$ computes pairwise similarities as squared overlaps:
 
@@ -250,7 +256,7 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
 
 ```{=html}
 <div id="auc-comparison-chart" class="auc-chart" role="img"
-     aria-label="Bar chart comparing mean ROC AUC across five classifiers on N=28: density-matrix linear SVM at 0.780, density-matrix Random Forest at 0.755, classical Random Forest at 0.615, parameterised quantum-circuit SVM at 0.525, Hilbert-Schmidt kernel SVM at 0.395."></div>
+     aria-label="Bar chart comparing mean ROC AUC across six classifiers on N=28 under subject-level leave-one-out resampling: density-matrix linear SVM at 0.785 (95% CI 0.583-0.947), density-matrix Random Forest at 0.714 (0.492-0.896), classical Random Forest at 0.617 (0.391-0.831), classical linear SVM at 0.320 (0.111-0.544), parameterised quantum-circuit SVM at 0.525, Hilbert-Schmidt kernel SVM at 0.395. CIs overlap substantially across the four direct-feature cells."></div>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.27.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.18.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.24.0"></script>
@@ -260,14 +266,15 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "background": "#fbf9f4",
     "title": {
-      "text": "Mean ROC AUC across five classifiers (matched 10-fold × 10 CV, N = 28)",
+      "text": "Subject-level LOSO ROC AUC across six classifiers, N = 28 (95% subject-bootstrap CI shown for direct-feature cells)",
       "fontSize": 12, "font": "Fraunces, Crimson Pro, Charter, serif",
       "color": "#0f1a2e", "anchor": "start", "frame": "group", "offset": 6
     },
     "data": { "values": [
-      { "model": "SVM linear · density-matrix",           "auc": 0.780, "auc_lo": 0.71,  "auc_hi": 0.85,  "set": "Density matrix as feature" },
-      { "model": "RandomForest · density-matrix",         "auc": 0.755, "auc_lo": 0.685, "auc_hi": 0.82,  "set": "Density matrix as feature" },
-      { "model": "RandomForest · classical QEEG menu",    "auc": 0.615, "auc_lo": 0.535, "auc_hi": 0.695, "set": "Classical baseline" },
+      { "model": "SVM linear · density-matrix",           "auc": 0.785, "auc_lo": 0.583, "auc_hi": 0.947, "set": "Density matrix as feature" },
+      { "model": "RandomForest · density-matrix",         "auc": 0.714, "auc_lo": 0.492, "auc_hi": 0.896, "set": "Density matrix as feature" },
+      { "model": "RandomForest · classical QEEG menu",    "auc": 0.617, "auc_lo": 0.391, "auc_hi": 0.831, "set": "Classical baseline" },
+      { "model": "SVM linear · classical QEEG menu",      "auc": 0.320, "auc_lo": 0.111, "auc_hi": 0.544, "set": "Classical baseline" },
       { "model": "QSVM-6q-ZZ · quantum features (Stage 5)", "auc": 0.525, "auc_lo": null,  "auc_hi": null,  "set": "Kernel proxy" },
       { "model": "Hilbert-Schmidt SVM · density-matrix",  "auc": 0.395, "auc_lo": null,  "auc_hi": null,  "set": "Kernel proxy" }
     ] },
@@ -283,7 +290,7 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
                             "domain": false, "ticks": false,
                             "labelColor": "#1f1f1f" } },
           "x": { "field": "auc", "type": "quantitative",
-                  "scale": { "domain": [0.35, 0.88] },
+                  "scale": { "domain": [0.10, 0.95] },
                   "axis": { "title": "Mean ROC AUC (bars · 95% bootstrap CI where shown)", "titleFont": "IBM Plex Sans, sans-serif",
                             "titleColor": "#3a4055", "titleFontSize": 11,
                             "labelFontSize": 10, "labelColor": "#3a4055",
@@ -344,7 +351,7 @@ If the quantum kernel and the explicit density-matrix features were equivalent o
 ```
 
 ::: {.figure-caption}
-**Figure 5.** Mean ROC AUC across five classifiers under the same matched 10-fold × 10 cross-validation, $N = 28$. Whiskers on the top three bars are 95% bootstrap CIs over 10 000 resamples of the 100 per-fold AUCs; the two kernel proxies are mean only because per-fold AUCs were not retained by the original Stage 5 / Hilbert-Schmidt evaluators and the rerun is queued for the next pipeline build. The two kernel routes to the density matrix (red) sit on either side of the random-classifier line at 0.50, while the direct-feature classifiers (purple) cluster well above the classical baseline (teal); the DM-SVM and classical-RF intervals do not overlap. The dashed vertical rule marks chance performance.
+**Figure 5 (updated).** Subject-level leave-one-out ROC AUC across six classifiers under the same matched 10-fold × 10 cross-validation, $N = 28$. Whiskers on the four direct-feature bars are 95% subject-bootstrap CIs over 10 000 resamples of subjects (replacing the earlier per-fold bootstrap which was too tight at this N). The two kernel proxies (red) are mean only; their per-fold AUCs were not retained by the original Stage 5 / Hilbert-Schmidt evaluators and the rerun is queued. The classical-feature linear SVM (teal, AUC = 0.32) sits below chance — consistent with high-dimensional overfitting on 622 features under top-10 ANOVA selection at $N = 28$ — and sets a low bar. Under matched linear-SVM, density-matrix features beat classical features substantially (DeLong paired test on subject-level AUC, $p = 0.001$). Under matched Random Forest, the gap is small and not significant (DeLong $p = 0.51$). The original headline contrast (DM-SVM vs Classical-RF) shows ΔAUC = +0.17 with DeLong $p = 0.26$ — the gap survives the rerun, the statistical significance does not. The dashed vertical rule marks chance performance.
 :::
 
 The two kernels reach below the chance line for different reasons, and the right reading needs both. The parameterised quantum-circuit kernel runs on the Stage 5 quantum-inspired summary features, which are first compressed through PCA to six dimensions and rescaled to $[0, \pi]$ before encoding; none of those steps preserve the off-diagonal complex structure that the explicit density matrix exposes, so the QSVM is operating on a lossy projection. The Hilbert-Schmidt kernel, by contrast, reads $\rho$ directly without PCA. At $N = 28$ with the binarised executive-function outcome the 95% bootstrap CI on AUC = 0.395 overlaps the 0.5 chance line, so whether that score reflects a structured anti-alignment between the cohort-mean fidelity geometry and the median split or sub-sample variance at this $N$ is exactly what the ds004284 replication is designed to test. What the explicit-feature result shows is more limited and more defensible: on this cohort and at this scale, the entries of $\rho$ carry information that survives explicit feature extraction in a way the similarity-matrix view does not.
@@ -454,7 +461,22 @@ The two kernels reach below the chance line for different reasons, and the right
 **Figure 7 (interactive).** Per-fold balanced accuracy under the same matched 10-fold × 10-repeats split used for Figure 5, with each fold's score averaged across the ten repeats. Drag the slider or hover any bar to see the top features the classifier relied on at that fold. Classical features are top-three relative beta power at posterior channels (Pz, P3, O1) every fold; the structured-feature panel surfaces a mixture of $\rho_{ii}$ diagonals and off-diagonal real / imaginary parts that varies across folds, which is the small-sample noise that underwrites the per-fold variance you can see in the bar heights.
 :::
 
-What the data shows, end to end: a linear classifier on the 900 entries of $\rho$ outperforms the best classical QEEG classifier on this cohort by a substantial AUC gap (0.780 versus 0.615). Two parallel kernel routes to the same density matrix, one through the Hilbert-Schmidt inner product and one through a parameterised circuit, both underperform the direct features. The signal lives in the entries of $\rho$. The kernels are one specific way of accessing it that, at this scale and on these features, throws information away.
+What the data shows, end to end, under matched cross-validation and subject-level leave-one-out resampling at $N = 28$: a linear classifier on the 900 entries of $\rho$ reaches LOSO AUC $0.785$ (95% subject-bootstrap CI $[0.58, 0.95]$), against $0.617$ ($[0.39, 0.83]$) for the best classical-QEEG classifier (Random Forest on 622 spectral and coherence features). The matched-SVM contrast is robust (DeLong paired test on subject-level AUC, $p = 0.001$); the matched-RF contrast is not ($p = 0.51$); the original cross-model contrast (DM-SVM vs Classical-RF) sits between them with $p = 0.26$. Two parallel kernel routes to the same density matrix, one through the Hilbert-Schmidt inner product and one through a parameterised circuit, both underperform the direct features. The signal lives in the entries of $\rho$, and the right reading at this scale is: **the density-matrix representation appears to compress signal more usefully than the conventional QEEG menu, but the strength of that claim is model-class-dependent and the CIs are wide enough that the matched-RF comparison should be treated as a tie until N = 100.** The kernels are one specific way of accessing the same information that, at this scale and on these features, throws information away.
+
+### Fair comparison summary (replication-ready)
+
+For the methodologically sensitive reader who skipped the rest of this section: the 2×2 design (feature set × model class) under matched 10-fold × 10 CV with leave-one-subject-out probabilities and paired subject-level DeLong tests is the inference to weight. Results:
+
+| Feature set | Model | LOSO AUC [95% subject-bootstrap CI] | LOSO BAcc [CI] | Permutation $p$ vs chance |
+|---|---|---|---|---|
+| Density matrix | Linear SVM | 0.785 [0.58, 0.95] | 0.752 [0.59, 0.90] | 0.078 |
+| Density matrix | Shallow RF | 0.714 [0.49, 0.90] | 0.537 [0.35, 0.72] | 0.098 |
+| Classical QEEG | Linear SVM | 0.320 [0.11, 0.54] | 0.428 [0.25, 0.61] | 0.569 |
+| Classical QEEG | Shallow RF | 0.617 [0.39, 0.83] | 0.642 [0.46, 0.82] | 0.118 |
+
+Paired DeLong (subject-level AUC): DM-SVM vs Classical-SVM $p = 0.001$ · DM-RF vs Classical-RF $p = 0.51$ · DM-SVM vs Classical-RF (original portfolio comparison) $p = 0.26$. No cell is significantly above chance at the conventional $α = 0.05$ threshold under permutation testing — the best cells sit at $p ≈ 0.08$.
+
+The honest one-liner: under matched linear SVM, density-matrix features carry information classical features do not; under matched RF, the contrast is not detectable at $N = 28$. The full numerical artifact is in [`results/stage5_fair_comparison.json`](https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/results/stage5_fair_comparison.json) of the pipeline repo.
 
 ::: {.notation-glossary}
 Notation

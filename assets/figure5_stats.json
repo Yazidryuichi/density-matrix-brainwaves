@@ -1,48 +1,169 @@
 {
   "n_subjects": 28,
   "n_folds_total": 100,
-  "wilcoxon_dm_svm_vs_classical_rf": {
-    "bacc": {
-      "w": 2193.0,
-      "p": 0.24866725086226293
-    },
-    "auc": {
-      "w": 1721.0,
-      "p": 0.005030301828963725
-    }
-  },
-  "boot_ci": [
+  "cv_design": "matched RepeatedStratifiedKFold (10-fold x 10 repeats); LOSO per-subject probabilities used for unbiased AUC + DeLong; subject-bootstrap CIs (N_BOOT=10000).",
+  "cells": [
     {
-      "model": "DM linear SVM",
-      "set": "density_matrix",
-      "auc_mean": 0.78,
-      "auc_ci_lo": 0.71,
-      "auc_ci_hi": 0.845,
-      "bacc_mean": 0.6575,
-      "bacc_ci_lo": 0.6025,
-      "bacc_ci_hi": 0.7075
+      "cell": "density_matrix+svm_linear",
+      "feature_set": "density_matrix",
+      "model_class": "svm_linear",
+      "loso_auc_mean": 0.7852581590755925,
+      "loso_auc_ci_lo": 0.5833333333333334,
+      "loso_auc_ci_hi": 0.946524064171123,
+      "loso_bacc_mean": 0.7517759288014786,
+      "loso_bacc_ci_lo": 0.5846153846153846,
+      "loso_bacc_ci_hi": 0.8957219251336899,
+      "per_fold_bacc_mean": 0.6575,
+      "per_fold_bacc_std": 0.2661179249881526,
+      "per_fold_auc_mean": 0.78,
+      "per_fold_auc_std": 0.3558089374931439
     },
     {
-      "model": "DM Random Forest",
-      "set": "density_matrix",
-      "auc_mean": 0.755,
-      "auc_ci_lo": 0.685,
-      "auc_ci_hi": 0.82,
-      "bacc_mean": 0.6425,
-      "bacc_ci_lo": 0.5875,
-      "bacc_ci_hi": 0.6975
+      "cell": "density_matrix+rf_shallow",
+      "feature_set": "density_matrix",
+      "model_class": "rf_shallow",
+      "loso_auc_mean": 0.7143784193124023,
+      "loso_auc_ci_lo": 0.4919786096256685,
+      "loso_auc_ci_hi": 0.8958333333333334,
+      "loso_bacc_mean": 0.5374179163907166,
+      "loso_bacc_ci_lo": 0.3541586538461538,
+      "loso_bacc_ci_hi": 0.7165775401069518,
+      "per_fold_bacc_mean": 0.6425,
+      "per_fold_bacc_std": 0.28560243346302217,
+      "per_fold_auc_mean": 0.755,
+      "per_fold_auc_std": 0.3499642838919423
     },
     {
-      "model": "Classical RF",
-      "set": "classical",
-      "auc_mean": 0.615,
-      "auc_ci_lo": 0.535,
-      "auc_ci_hi": 0.695,
-      "bacc_mean": 0.6175,
-      "bacc_ci_lo": 0.5625,
-      "bacc_ci_hi": 0.6725
+      "cell": "classical+svm_linear",
+      "feature_set": "classical",
+      "model_class": "svm_linear",
+      "loso_auc_mean": 0.3203070252749622,
+      "loso_auc_ci_lo": 0.11111111111111116,
+      "loso_auc_ci_hi": 0.543859649122807,
+      "loso_bacc_mean": 0.42833178842273356,
+      "loso_bacc_ci_lo": 0.25384615384615383,
+      "loso_bacc_ci_hi": 0.6096628045157452,
+      "per_fold_bacc_mean": 0.4575,
+      "per_fold_bacc_std": 0.2851644262526446,
+      "per_fold_auc_mean": 0.445,
+      "per_fold_auc_std": 0.4236448984704053
+    },
+    {
+      "cell": "classical+rf_shallow",
+      "feature_set": "classical",
+      "model_class": "rf_shallow",
+      "loso_auc_mean": 0.6166440565729915,
+      "loso_auc_ci_lo": 0.390625,
+      "loso_auc_ci_hi": 0.8307692307692307,
+      "loso_bacc_mean": 0.6422447795263938,
+      "loso_bacc_ci_lo": 0.45906432748538006,
+      "loso_bacc_ci_hi": 0.8179487179487179,
+      "per_fold_bacc_mean": 0.6175,
+      "per_fold_bacc_std": 0.27716195626384227,
+      "per_fold_auc_mean": 0.615,
+      "per_fold_auc_std": 0.41746257317273366
     }
   ],
-  "headline_delta_auc_mean": 0.16500000000000004,
-  "headline_delta_bacc_mean": 0.039999999999999925
+  "pairwise_delong": [
+    {
+      "cell_1": "density_matrix+svm_linear",
+      "cell_2": "density_matrix+rf_shallow",
+      "auc_1": 0.7857142857142857,
+      "auc_2": 0.7142857142857143,
+      "delta_auc": 0.0714285714285714,
+      "delong_z": 1.2018504251546622,
+      "delong_p_two_sided": 0.22942148462969003
+    },
+    {
+      "cell_1": "density_matrix+svm_linear",
+      "cell_2": "classical+svm_linear",
+      "auc_1": 0.7857142857142857,
+      "auc_2": 0.32142857142857145,
+      "delta_auc": 0.46428571428571425,
+      "delong_z": 3.468954644035968,
+      "delong_p_two_sided": 0.0005224876537786027
+    },
+    {
+      "cell_1": "density_matrix+svm_linear",
+      "cell_2": "classical+rf_shallow",
+      "auc_1": 0.7857142857142857,
+      "auc_2": 0.6173469387755102,
+      "delta_auc": 0.16836734693877553,
+      "delong_z": 1.1239844604287832,
+      "delong_p_two_sided": 0.2610196183560811
+    },
+    {
+      "cell_1": "density_matrix+rf_shallow",
+      "cell_2": "classical+svm_linear",
+      "auc_1": 0.7142857142857143,
+      "auc_2": 0.32142857142857145,
+      "delta_auc": 0.39285714285714285,
+      "delong_z": 2.6584570891766486,
+      "delong_p_two_sided": 0.00784993463993322
+    },
+    {
+      "cell_1": "density_matrix+rf_shallow",
+      "cell_2": "classical+rf_shallow",
+      "auc_1": 0.7142857142857143,
+      "auc_2": 0.6173469387755102,
+      "delta_auc": 0.09693877551020413,
+      "delong_z": 0.6639449105616787,
+      "delong_p_two_sided": 0.5067255706550171
+    },
+    {
+      "cell_1": "classical+svm_linear",
+      "cell_2": "classical+rf_shallow",
+      "auc_1": 0.32142857142857145,
+      "auc_2": 0.6173469387755102,
+      "delta_auc": -0.2959183673469387,
+      "delong_z": -2.8035358182324237,
+      "delong_p_two_sided": 0.005054561753793374
+    }
+  ],
+  "permutation_tests": [
+    {
+      "cell": "density_matrix+svm_linear",
+      "per_fold_bacc_obs": 0.6575,
+      "permutation_p": 0.0784313725490196
+    },
+    {
+      "cell": "density_matrix+rf_shallow",
+      "per_fold_bacc_obs": 0.6425,
+      "permutation_p": 0.09803921568627451
+    },
+    {
+      "cell": "classical+svm_linear",
+      "per_fold_bacc_obs": 0.4575,
+      "permutation_p": 0.5686274509803921
+    },
+    {
+      "cell": "classical+rf_shallow",
+      "per_fold_bacc_obs": 0.6175,
+      "permutation_p": 0.11764705882352941
+    }
+  ],
+  "headline": {
+    "n_subjects": 28,
+    "class_balance": [
+      14,
+      14
+    ],
+    "design": "2x2 (feature_set x model_class), matched CV across all cells",
+    "feature_set_within_model_class": {
+      "svm_linear": {
+        "delta_auc_dm_minus_cl_subject_level": 0.4649511338006303,
+        "delta_bacc_dm_minus_cl_subject_level": 0.323444140378745
+      },
+      "rf_shallow": {
+        "delta_auc_dm_minus_cl_subject_level": 0.09773436273941083,
+        "delta_bacc_dm_minus_cl_subject_level": -0.10482686313567724
+      }
+    }
+  },
+  "honesty_notes": [
+    "AUC and BAcc here are LOSO (subject-level), NOT averages of per-fold metrics. Per-fold means are also reported for comparison with the prior version of this analysis.",
+    "Bootstrap CIs resample SUBJECTS (n=N), not folds (n=100). Per-fold bootstrap was too tight at small N.",
+    "DeLong tests use paired subject-level AUCs. Wilcoxon on per-fold AUCs treated correlated folds as independent and is not reported as the primary inference.",
+    "Permutation p-values report whether each cell's per-fold mean BAcc exceeds chance under label permutation."
+  ]
 }
