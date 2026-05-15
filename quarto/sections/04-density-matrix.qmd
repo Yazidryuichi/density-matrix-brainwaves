@@ -478,6 +478,20 @@ Paired DeLong (subject-level AUC): DM-SVM vs Classical-SVM $p = 0.001$ · DM-RF 
 
 The honest one-liner: under matched linear SVM, density-matrix features carry information classical features do not; under matched RF, the contrast is not detectable at $N = 28$. The full numerical artifact is in [`results/stage5_fair_comparison.json`](https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/results/stage5_fair_comparison.json) of the pipeline repo.
 
+::: {.callout-note}
+## L1 sensitivity caveat (added 2026-05-15) {#l1-sensitivity-caveat}
+
+The matched-SVM contrast above ($p = 0.001$) is **regularisation-dependent**. A subsequent sensitivity test replaces the L2-SVC + ANOVA-$k$=10 classical baseline with an L1-regularised LogReg on the same 622 classical features (no pre-selection): Classical recovers to LOSO AUC $= 0.663$ [0.444, 0.856] (ΔAUC $= +0.343$ vs $k$=10, paired DeLong $p < 0.001$), and the DM-vs-Classical paired DeLong drops to $p = 0.196$ — **not significant** at this pilot $N$. The classical-SVM cell at AUC $0.32$ was an L2-SVC + ANOVA-$k$=10 overfitting artefact (622 features at $N = 28$), not a feature-set verdict.
+
+| Cell | LOSO AUC [95% CI] |
+|---|---|
+| Classical + L2-SVC, ANOVA $k$=10 (Stage 5 baseline) | 0.320 [0.11, 0.54] |
+| Classical + L1-LogReg, no pre-selection | **0.663 [0.44, 0.86]** |
+| Density-matrix + L2-SVC, ANOVA $k$=10 | 0.785 [0.58, 0.95] |
+
+Paired DeLong (subject-level): Classical+L1 vs Classical+L2-$k$=10 $p < 0.001$; DM+L2 vs Classical+L1 **$p = 0.196$** (not significant). The honest framing is therefore *DM-feature advantage is detectable but regularisation-dependent at $N = 28$*; matched-baseline significance requires $N \gg 28$. The L1 sensitivity scaffolding is in [`stages/stage5_fair_comparison.py`](https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/stages/stage5_fair_comparison.py) (run with `--include-l1-sensitivity`) and [`scripts/update_l1_table.py`](https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/scripts/update_l1_table.py); see also the [Sensitivity analysis subsection](https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/README.md#sensitivity-analysis-does-l1-regularisation-lift-classicalsvm-out-of-below-chance) of the biomarker README. The numbers tabulated here came from a bit-identical standalone replication of these cells (verified to 16 significant figures against Stage 5's `_evaluate_loso`); the biomarker README's L1 table will populate with the canonical Stage 5 output the next time Stage 5 is rerun with `--include-l1-sensitivity` and the helper script is invoked.
+:::
+
 ::: {.notation-glossary}
 Notation
 
