@@ -869,6 +869,46 @@ Note
 </table>
 <p>Paired DeLong (subject-level AUC): DM-SVM vs Classical-SVM <span class="math inline">\(p = 0.001\)</span> · DM-RF vs Classical-RF <span class="math inline">\(p = 0.51\)</span> · DM-SVM vs Classical-RF (original portfolio comparison) <span class="math inline">\(p = 0.26\)</span>. No cell is significantly above chance at the conventional <span class="math inline">\(α = 0.05\)</span> threshold under permutation testing — the best cells sit at <span class="math inline">\(p ≈ 0.08\)</span>.</p>
 <p>The honest one-liner: under matched linear SVM, density-matrix features carry information classical features do not; under matched RF, the contrast is not detectable at <span class="math inline">\(N = 28\)</span>. The full numerical artifact is in <a href="https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/results/stage5_fair_comparison.json"><code>results/stage5_fair_comparison.json</code></a> of the pipeline repo.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>L1 sensitivity caveat (added 2026-05-15)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The matched-SVM contrast above (<span class="math inline">\(p = 0.001\)</span>) is <strong>regularisation-dependent</strong>. A subsequent sensitivity test replaces the L2-SVC + ANOVA-<span class="math inline">\(k\)</span>=10 classical baseline with an L1-regularised LogReg on the same 622 classical features (no pre-selection): Classical recovers to LOSO AUC <span class="math inline">\(= 0.663\)</span> [0.444, 0.856] (ΔAUC <span class="math inline">\(= +0.343\)</span> vs <span class="math inline">\(k\)</span>=10, paired DeLong <span class="math inline">\(p &lt; 0.001\)</span>), and the DM-vs-Classical paired DeLong drops to <span class="math inline">\(p = 0.196\)</span> — <strong>not significant</strong> at this pilot <span class="math inline">\(N\)</span>. The classical-SVM cell at AUC <span class="math inline">\(0.32\)</span> was an L2-SVC + ANOVA-<span class="math inline">\(k\)</span>=10 overfitting artefact (622 features at <span class="math inline">\(N = 28\)</span>), not a feature-set verdict.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cell</th>
+<th>LOSO AUC [95% CI]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Classical + L2-SVC, ANOVA <span class="math inline">\(k\)</span>=10 (Stage 5 baseline)</td>
+<td>0.320 [0.11, 0.54]</td>
+</tr>
+<tr class="even">
+<td>Classical + L1-LogReg, no pre-selection</td>
+<td><strong>0.663 [0.44, 0.86]</strong></td>
+</tr>
+<tr class="odd">
+<td>Density-matrix + L2-SVC, ANOVA <span class="math inline">\(k\)</span>=10</td>
+<td>0.785 [0.58, 0.95]</td>
+</tr>
+</tbody>
+</table>
+<p>Paired DeLong (subject-level): Classical+L1 vs Classical+L2-<span class="math inline">\(k\)</span>=10 <span class="math inline">\(p &lt; 0.001\)</span>; DM+L2 vs Classical+L1 <strong><span class="math inline">\(p = 0.196\)</span></strong> (not significant). The honest framing is therefore <em>DM-feature advantage is detectable but regularisation-dependent at <span class="math inline">\(N = 28\)</span></em>; matched-baseline significance requires <span class="math inline">\(N \gg 28\)</span>. The L1 sensitivity scaffolding is in <a href="https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/stages/stage5_fair_comparison.py"><code>stages/stage5_fair_comparison.py</code></a> (run with <code>--include-l1-sensitivity</code>) and <a href="https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/scripts/update_l1_table.py"><code>scripts/update_l1_table.py</code></a>; see also the <a href="https://github.com/Yazidryuichi/biomarker-iium-pipeline/blob/main/README.md#sensitivity-analysis-does-l1-regularisation-lift-classicalsvm-out-of-below-chance">Sensitivity analysis subsection</a> of the biomarker README. The numbers tabulated here came from a bit-identical standalone replication of these cells (verified to 16 significant figures against Stage 5’s <code>_evaluate_loso</code>); the biomarker README’s L1 table will populate with the canonical Stage 5 output the next time Stage 5 is rerun with <code>--include-l1-sensitivity</code> and the helper script is invoked.</p>
+</div>
+</div>
 <div class="notation-glossary">
 <p>Notation</p>
 <table class="caption-top table">
